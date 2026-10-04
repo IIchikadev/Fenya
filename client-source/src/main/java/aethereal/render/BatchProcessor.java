@@ -1,4 +1,4 @@
-package aethereal.autobuy;
+package aethereal.render;
 
 
 import aethereal.config.BaseProcessor;

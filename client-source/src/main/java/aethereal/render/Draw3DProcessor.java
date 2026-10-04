@@ -1,7 +1,6 @@
 package aethereal.render;
 
 
-import aethereal.autobuy.BatchProcessor;
 import aethereal.config.BaseProcessor;
 import aethereal.core.Socket;
 import aethereal.core.EventTarget;

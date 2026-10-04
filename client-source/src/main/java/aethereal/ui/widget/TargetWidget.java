@@ -31,7 +31,7 @@ public class TargetWidget extends Widget {
     public TargetWidget() {
         super(new DragInfo("Таргет-худ", 0.0f, 0.0f, 0.0f, 0.0f));
         this.f = new BooleanSetting("Визуализация предметов", true);
-        this.g = new BooleanSetting("Отображать при наводке", false);
+        this.g = new BooleanSetting("Отображать при наводке", true);
         this.h = new AnimationUtil();
         this.i = new AnimationUtil();
         this.k = "";
@@ -120,39 +120,15 @@ public class TargetWidget extends Widget {
 
     @Override
     public void a(GlobalEvent event) {
-        LivingEntity class_1309Var;
-        LivingEntity class_1309Var2;
-        LivingEntity targets = null;
-        if (this.g.c().booleanValue()) {
-            EntityHitResult class_3966Var = Interface.mc.crosshairTarget instanceof EntityHitResult ? (EntityHitResult) Interface.mc.crosshairTarget : null;
-            if (class_3966Var instanceof EntityHitResult) {
-                EntityHitResult hit = class_3966Var;
-                LivingEntity class_1309VarMethod_17782 = hit.getEntity() instanceof LivingEntity ? (LivingEntity) hit.getEntity() : null;
-                if (class_1309VarMethod_17782 instanceof PlayerEntity) {
-                    LivingEntity class_1309Var3 = class_1309VarMethod_17782;
-                    if (class_1309Var3 != Interface.mc.player) {
-                        class_1309Var = class_1309Var3;
-                    } else {
-                        class_1309Var = null;
-                    }
-                } else {
-                    class_1309Var = null;
-                }
-            } else {
-                class_1309Var = null;
-            }
-        } else {
-            class_1309Var = null;
+        // Цель — игрок под прицелом (в пределах досягаемости). В открытом чате показываем себя,
+        // чтобы можно было перетащить виджет.
+        LivingEntity crosshair = null;
+        if (this.g.c().booleanValue() && Interface.mc.crosshairTarget instanceof EntityHitResult hit
+                && hit.getEntity() instanceof PlayerEntity player && player != Interface.mc.player) {
+            crosshair = player;
         }
-        LivingEntity crosshair = class_1309Var;
-        if (targets != null) {
-            class_1309Var2 = targets;
-        } else if (crosshair != null) {
-            class_1309Var2 = crosshair;
-        } else {
-            class_1309Var2 = Interface.mc.currentScreen instanceof ChatScreen ? Interface.mc.player : null;
-        }
-        LivingEntity target = class_1309Var2;
+        LivingEntity target = crosshair != null ? crosshair
+                : (Interface.mc.currentScreen instanceof ChatScreen ? Interface.mc.player : null);
         boolean visible = target != null;
         if (target != null) {
             this.j = target;

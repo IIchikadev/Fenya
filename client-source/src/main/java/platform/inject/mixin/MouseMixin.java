@@ -7,7 +7,6 @@ import aethereal.event.ClickEvent;
 import aethereal.event.KeyEvent;
 import aethereal.event.LookEvent;
 import aethereal.event.ScrollEvent;
-import aethereal.ui.screen.AssistantScreen;
 import aethereal.ui.screen.SwapScreen;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
@@ -21,7 +20,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class MouseMixin {
     @Inject(method = {"onMouseButton"}, at = {@At("HEAD")}, cancellable = true)
     public void onMouseButton(long window, int button, int action, int modifiers, CallbackInfo ci) {
-        if (Interface.mc.currentScreen == null || (Interface.mc.currentScreen instanceof SwapScreen) || (Interface.mc.currentScreen instanceof AssistantScreen)) {
+        if (Interface.mc.currentScreen == null || (Interface.mc.currentScreen instanceof SwapScreen)) {
             EventManager.a(new KeyEvent((button < 0 || button > 7) ? button : (-100) + button, 0, action, modifiers));
         }
         if (action == 1) {

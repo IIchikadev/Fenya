@@ -4,12 +4,10 @@ import aethereal.config.ThemeInfo;
 import aethereal.core.Action;
 import aethereal.core.Socket;
 import aethereal.core.Interface;
-import aethereal.core.InterfaceC0020Opcode;
 import aethereal.render.AnimationUtil;
 import aethereal.render.ColorUtil;
 import aethereal.render.EasingList;
 import aethereal.render.Fonts;
-import aethereal.util.InventoryUtil;
 import aethereal.util.Marker;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gl.ShaderProgramKeys;
@@ -109,16 +107,14 @@ public class RadialScreen implements Interface {
             double endAngle = startAngle + (6.2831872368967865d / ((double) count));
             double drawStart = startAngle + (((endAngle - startAngle) * 0.010000000036845655d) / 2.0d);
             double drawEnd = endAngle - (((endAngle - startAngle) * 0.010000000036845655d) / 2.0d);
-            boolean isSelected = slot == this.e && !(mc.currentScreen instanceof AssistantScreen);
+            boolean isSelected = slot == this.e;
             a segment = this.b[slot];
             if (segment != null) {
                 segment.getAnimationUtil().a(0.0f, 1.0f, 0.3f, EasingList.g, mc.getRenderTickCounter().getTickDelta(false));
                 segment.getAnimationUtil().a(slot == a(mouseX, mouseY, center));
                 int primary = ColorUtil.combineColorWithAlpha(Socket.getInstance().getModuleProcessor().o().a(ThemeInfo.PRIMARY).toIntColor(), 80);
                 int hoverColor = ColorUtil.lerpColor(ColorUtil.convertToARGB(255, 255, 255, 80), primary, segment.getAnimationUtil().c());
-                boolean assistant = mc.currentScreen instanceof AssistantScreen;
-                int amount = (!assistant || segment.b.isEmpty()) ? -1 : InventoryUtil.c(segment.b, false);
-                int fillColor = ((isSelected || amount == 0) && !segment.b.isEmpty()) ? ColorUtil.convertToARGB(255, 128, 128, 80) : hoverColor;
+                int fillColor = (isSelected && !segment.b.isEmpty()) ? ColorUtil.convertToARGB(255, 128, 128, 80) : hoverColor;
                 double midAngle = (startAngle + endAngle) / 2.0d;
                 float lift = segment.getAnimationUtil().c() * 4.0f;
                 float offsetX = ((float) Math.cos(midAngle)) * lift;
@@ -128,10 +124,6 @@ public class RadialScreen implements Interface {
                 float iconY = cy + offsetY + (((float) Math.sin(midAngle)) * iconRadius);
                 if (!segment.b.isEmpty()) {
                     Socket.getInstance().getModuleProcessor().j().a(context, segment.b, iconX - 8.0f, iconY - 8.0f, 0, 1.0f, 1.0f, false);
-                    if (assistant && amount > 0) {
-                        String label = String.valueOf(amount);
-                        Fonts.e.a(context.getMatrices(), label, (iconX + 8.0f) - Fonts.e.a(label, 10.0f), (iconY + 10.0f) - Fonts.e.a(10.0f), 10.0f, ColorUtil.convertToARGB(255, 255, 255, amount > 0 ? 235 : InterfaceC0020Opcode.al));
-                    }
                 } else {
                     Fonts.e.a(context.getMatrices(), Marker.b, iconX - (Fonts.e.a(Marker.b, 14.0f) / 2.0f), iconY - (Fonts.e.a(14.0f) / 2.0f), 14.0f, ColorUtil.convertToARGB(255, 255, 255, 255));
                 }
@@ -149,14 +141,6 @@ public class RadialScreen implements Interface {
         String name = string;
         if (hasSegment) {
             Fonts.e.a(context.getMatrices(), name, cx - (Fonts.e.a(name, 10.0f) / 2.0f), baseY, 10.0f, ColorUtil.convertToARGB(255, 255, 255, 255));
-            if (mc.currentScreen instanceof AssistantScreen) {
-                Fonts.d.a(context.getMatrices(), "СКМ – добавление слота", cx - (Fonts.d.a("СКМ – добавление слота", 7.0f) / 2.0f), baseY + Fonts.d.a(10.0f) + 3.0f, 7.0f, ColorUtil.convertToARGB(255, 255, 255, InterfaceC0020Opcode.cG));
-                return;
-            }
-            return;
-        }
-        if (mc.currentScreen instanceof AssistantScreen) {
-            Fonts.d.a(context.getMatrices(), "СКМ – добавление слота", cx - (Fonts.d.a("СКМ – добавление слота", 7.0f) / 2.0f), baseY, 7.0f, ColorUtil.convertToARGB(255, 255, 255, InterfaceC0020Opcode.cG));
         }
     }
 

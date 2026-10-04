@@ -1,7 +1,6 @@
 package aethereal.config;
 
 
-import aethereal.autobuy.AutoBuyEntry;
 import aethereal.core.Socket;
 import aethereal.core.EventTarget;
 import aethereal.core.Module;
@@ -17,7 +16,6 @@ import aethereal.module.render.*;
 import aethereal.render.Animations;
 import aethereal.setting.BindSetting;
 import aethereal.setting.Setting;
-import aethereal.ui.screen.AssistantScreen;
 import aethereal.ui.screen.RadialScreen;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

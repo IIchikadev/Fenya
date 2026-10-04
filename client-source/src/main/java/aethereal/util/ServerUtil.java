@@ -13,7 +13,6 @@ import net.minecraft.scoreboard.ReadableScoreboardScore;
 import net.minecraft.scoreboard.Scoreboard;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.scoreboard.Team;
-import net.minecraft.world.biome.BiomeKeys;
 
 import java.util.List;
 import java.util.Locale;
@@ -128,10 +127,6 @@ public class ServerUtil implements Interface {
 
         public static boolean b() {
             return a$() && Interface.mc.world != null && Interface.mc.world.getRegistryKey().getValue().toString().equals("minecraft:duels");
-        }
-
-        public static boolean c() {
-            return a$() && Interface.mc.player.networkHandler.getBrand() != null && Interface.mc.world.getBiome(Interface.mc.player.getBlockPos()).matchesKey(BiomeKeys.SWAMP) && Interface.mc.player.networkHandler.getBrand().contains("BotFilter (https://vk.cc/8hr1pU)");
         }
 
         public static int d() {

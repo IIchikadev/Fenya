@@ -11,7 +11,6 @@ public class HandlerProcessor extends BaseProcessor {
     }
 
     private final InventoryHandler c = new InventoryHandler();
-    private final UseableHandler d = new UseableHandler();
     private final StopHandler e = new StopHandler();
     private final MainHandler j = new MainHandler();
     private final TPSHandler l = new TPSHandler();
@@ -25,10 +24,6 @@ public class HandlerProcessor extends BaseProcessor {
 
     public InventoryHandler getInventoryHandler() {
         return this.c;
-    }
-
-    public UseableHandler getUseableHandler() {
-        return this.d;
     }
 
     public StopHandler getStopHandler() {

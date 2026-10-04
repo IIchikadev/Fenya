@@ -1,10 +1,8 @@
 package aethereal.util;
 
-import aethereal.autobuy.AutoBuyEntry;
 import aethereal.core.Interface;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.AttributeModifiersComponent;
-import net.minecraft.component.type.BundleContentsComponent;
 import net.minecraft.component.type.EquippableComponent;
 import net.minecraft.component.type.ItemEnchantmentsComponent;
 import net.minecraft.enchantment.Enchantment;
@@ -22,10 +20,7 @@ import net.minecraft.registry.RegistryKey;
 import net.minecraft.registry.RegistryKeys;
 import net.minecraft.registry.entry.RegistryEntry;
 
-import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 public class InventoryUtil implements Interface {
     private InventoryUtil() {
@@ -105,66 +100,6 @@ public class InventoryUtil implements Interface {
             return -1;
         }
         return -1;
-    }
-
-    public static int b(ItemStack targetStack, boolean hotbar) {
-        AutoBuyEntry info = Arrays.stream(AutoBuyEntry.values()).filter(i -> {
-            return i.a(targetStack);
-        }).findFirst().orElse(null);
-        if (info == null) {
-            return -1;
-        }
-        int direct = IntStream.range(0, hotbar ? 9 : 36).filter(slot -> {
-            return info.a(mc.player.getInventory().getStack(slot));
-        }).findFirst().orElse(-1);
-        if (direct != -1 || hotbar) {
-            return direct;
-        }
-        return IntStream.range(0, 36).filter(slot2 -> {
-            BundleContentsComponent contents = mc.player.getInventory().getStack(slot2).get(DataComponentTypes.BUNDLE_CONTENTS);
-            if (contents != null) {
-                Stream<ItemStack> streamMethod_59707 = contents.stream();
-                Objects.requireNonNull(info);
-                return streamMethod_59707.anyMatch(info::a);
-            }
-            return false;
-        }).findFirst().orElse(-1);
-    }
-
-    public static int a(ItemStack bundleStack, ItemStack targetStack) {
-        AutoBuyEntry info = Arrays.stream(AutoBuyEntry.values()).filter(i -> {
-            return i.a(targetStack);
-        }).findFirst().orElse(null);
-        BundleContentsComponent contents = bundleStack.get(DataComponentTypes.BUNDLE_CONTENTS);
-        if (info == null || contents == null) {
-            return -1;
-        }
-        return IntStream.range(0, contents.size()).filter(index -> {
-            return info.a(contents.get(index));
-        }).findFirst().orElse(-1);
-    }
-
-    public static int c(ItemStack targetStack, boolean hotbar) {
-        AutoBuyEntry info = Arrays.stream(AutoBuyEntry.values()).filter(i -> {
-            return i.a(targetStack);
-        }).findFirst().orElse(null);
-        if (info == null) {
-            return 0;
-        }
-        return IntStream.range(0, hotbar ? 9 : 36).mapToObj(slot -> {
-            return mc.player.getInventory().getStack(slot);
-        }).mapToInt(stack -> {
-            BundleContentsComponent contents = stack.get(DataComponentTypes.BUNDLE_CONTENTS);
-            if (contents != null) {
-                Stream<ItemStack> streamMethod_59707 = contents.stream();
-                Objects.requireNonNull(info);
-                return streamMethod_59707.filter(info::a).mapToInt(ItemStack::getCount).sum();
-            }
-            if (info.a(stack)) {
-                return stack.getCount();
-            }
-            return 0;
-        }).sum();
     }
 
     public static int c(Item item) {

@@ -1,6 +1,6 @@
 package aethereal.core;
 
-import aethereal.autobuy.BatchProcessor;
+import aethereal.render.BatchProcessor;
 import aethereal.config.BaseProcessor;
 import aethereal.config.ModuleProcessor;
 import aethereal.config.ResourcePacksProcessor;

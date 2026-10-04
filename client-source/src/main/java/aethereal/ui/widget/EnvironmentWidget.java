@@ -23,6 +23,7 @@ import net.minecraft.component.type.UseCooldownComponent;
 import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.util.hit.EntityHitResult;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -191,10 +192,10 @@ public class EnvironmentWidget extends Widget implements Interface {
 
     @Override
     public void a(GlobalEvent event) {
-        PlayerEntity class_1657Var;
         if (mc.world != null && mc.player != null) {
-            class_1657Var = null;
-            PlayerEntity target = class_1657Var;
+            // Цель — игрок под прицелом (в пределах досягаемости); его показываем первым.
+            PlayerEntity target = mc.crosshairTarget instanceof EntityHitResult hit
+                    && hit.getEntity() instanceof PlayerEntity player && player != mc.player ? player : null;
             if (target != null && !target.getUuid().equals(this.i[0])) {
                 this.i[1] = this.i[0];
                 this.i[0] = target.getUuid();
