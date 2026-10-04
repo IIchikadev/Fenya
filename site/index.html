@@ -250,7 +250,7 @@
   <div class="wrap">
     <div class="sec-head rv">
       <span class="mono">02 — Модули</span>
-      <h2>Шестьдесят четыре<br />способа переодеть игру</h2>
+      <h2>Сорок<br />способов переодеть игру</h2>
       <p>Выбери категорию — покажем, что в ней лежит. Каждый модуль вешается на свою клавишу.</p>
     </div>
 
@@ -258,6 +258,7 @@
       <div class="tabs" id="tabs" role="tablist"></div>
       <div class="mods-grid" id="modsGrid"></div>
     </div>
+    <div class="mods-more rv"><a href="modules.html" class="btn btn-g">Все модули и поиск →</a></div>
   </div>
 </section>
 
@@ -306,11 +307,11 @@
 <section class="sec" id="download">
   <div class="wrap">
     <div class="cta rv">
-      <span class="eyebrow">Build 1.0 «Filament» · 18 МБ</span>
+      <span class="eyebrow" data-release>Последняя версия с GitHub</span>
       <h2 style="margin-top: 26px">Подключайся</h2>
       <p>Скачай лоадер и запусти — через минуту ты уже крутишь настройки в ClickGUI.</p>
       <div class="hero-btns">
-        <a href="#" class="btn btn-p btn-lg">
+        <a href="https://github.com/IIchikadev/Fenya/releases/latest" class="btn btn-p btn-lg" data-download>
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M12 3v12m0 0 4.5-4.5M12 15l-4.5-4.5M4 20h16" />
           </svg>
@@ -342,8 +343,8 @@
       <div class="foot-cols">
         <div class="foot-col">
           <b>Клиент</b>
-          <a href="#download">Скачать</a><a href="#modules">Модули</a>
-          <a href="#features">Возможности</a><a href="#">Список изменений</a>
+          <a href="#download">Скачать</a><a href="modules.html">Все модули</a>
+          <a href="#features">Возможности</a><a href="https://github.com/IIchikadev/Fenya/releases" data-changelog>Список изменений</a>
         </div>
         <div class="foot-col">
           <b>Сообщество</b>
@@ -370,6 +371,8 @@
 
 
 
+<script src="modules.js"></script>
 <script src="script.js"></script>
+<script src="release.js"></script>
 </body>
 </html>
