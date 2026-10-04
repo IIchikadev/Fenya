@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.HeadFeatureEvent;
+import socket.core.EventManager;
+import socket.event.HeadFeatureEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;

@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.SoundEvent;
+import socket.core.EventManager;
+import socket.event.SoundEvent;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.sound.AbstractSoundInstance;
 import net.minecraft.client.sound.SoundInstance;

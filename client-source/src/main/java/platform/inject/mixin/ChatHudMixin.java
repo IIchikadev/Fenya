@@ -1,10 +1,10 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.Interface;
-import aethereal.render.Animations;
-import aethereal.render.EasingList;
+import socket.core.Socket;
+import socket.core.Interface;
+import socket.render.Animations;
+import socket.render.EasingList;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
@@ -42,7 +42,7 @@ public abstract class ChatHudMixin {
 
     @ModifyArgs(method = {"render(Lnet/minecraft/client/gui/DrawContext;IIIZ)V"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V"), require = 0)
     private void onRenderLineBackground(Args args, @Local ChatHudLine.Visible line) {
-        if (!Socket.getInstance().getModuleProcessor().t().as().m() || !Socket.getInstance().getModuleProcessor().t().as().q().c().booleanValue() || (((Integer) args.get(4)).intValue() & 16777215) != 0) {
+        if (!Socket.getInstance().getProcessors().modules().chatHelper().m() || !Socket.getInstance().getProcessors().modules().chatHelper().q().c().booleanValue() || (((Integer) args.get(4)).intValue() & 16777215) != 0) {
             return;
         }
         args.set(2, Integer.valueOf(((Integer) args.get(0)).intValue() + Interface.mc.textRenderer.getWidth(line.content()) + 5));
@@ -50,7 +50,7 @@ public abstract class ChatHudMixin {
 
     @WrapOperation(method = {"render(Lnet/minecraft/client/gui/DrawContext;IIIZ)V"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;drawTextWithShadow(Lnet/minecraft/client/font/TextRenderer;Lnet/minecraft/text/OrderedText;III)I")})
     private int onRenderLineText(DrawContext context, TextRenderer renderer, OrderedText text, int x, int y, int color, Operation<Integer> original, @Local ChatHudLine.Visible line, @Local(argsOnly = true, ordinal = 0) int currentTick) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (!animations.m() || !animations.q().a("Появление сообщений").c().booleanValue()) {
             return original.call(context, renderer, text, Integer.valueOf(x), Integer.valueOf(y), Integer.valueOf(color)).intValue();
         }

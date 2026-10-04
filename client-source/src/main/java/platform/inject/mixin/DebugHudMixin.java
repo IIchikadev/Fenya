@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.Interface;
+import socket.core.Socket;
+import socket.core.Interface;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.gui.hud.DebugHud;
 import net.minecraft.util.hit.BlockHitResult;

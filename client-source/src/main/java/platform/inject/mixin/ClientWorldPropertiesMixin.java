@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.AmbienceEvent;
+import socket.core.EventManager;
+import socket.event.AmbienceEvent;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.world.ClientWorld;
 import org.spongepowered.asm.mixin.Mixin;

@@ -8,7 +8,7 @@ $jars = foreach ($module in @('lwjgl','lwjgl-glfw','lwjgl-opengl')) {
     Get-ChildItem $base -Recurse -Filter '*.jar' | Where-Object { $_.Name -eq "$module-3.3.3.jar" -or $_.Name -eq "$module-3.3.3-natives-windows.jar" } | Select-Object -ExpandProperty FullName
 }
 $classpath = ($jars + $classes) -join ';'
-& "$jdk/javac.exe" -encoding UTF-8 -cp $classpath -d $classes "$PSScriptRoot/ShaderSmokeTest.java" "$PSScriptRoot/AuctionPriceTest.java" "$project/src/main/java/aethereal/util/AuctionPrice.java"
+& "$jdk/javac.exe" -encoding UTF-8 -cp $classpath -d $classes "$PSScriptRoot/ShaderSmokeTest.java" "$PSScriptRoot/AuctionPriceTest.java" "$project/src/main/java/socket/util/AuctionPrice.java"
 if ($LASTEXITCODE -ne 0) { throw 'Validation compilation failed' }
 & "$jdk/java.exe" -cp $classpath AuctionPriceTest
 if ($LASTEXITCODE -ne 0) { throw 'Price tests failed' }

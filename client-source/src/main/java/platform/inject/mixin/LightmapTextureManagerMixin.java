@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.GammaEvent;
-import aethereal.event.RemovalsEvent;
+import socket.core.EventManager;
+import socket.event.GammaEvent;
+import socket.event.RemovalsEvent;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

@@ -1,4 +1,4 @@
-import aethereal.util.AuctionPrice;
+import socket.util.AuctionPrice;
 public class AuctionPriceTest {
     private static void check(String text, long expected) {
         long actual = AuctionPrice.parse(text);

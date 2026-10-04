@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.PushEvent;
+import socket.core.EventManager;
+import socket.event.PushEvent;
 import net.minecraft.util.shape.VoxelShape;
 import net.minecraft.util.shape.VoxelShapes;
 import net.minecraft.world.border.WorldBorder;

@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.PushEvent;
+import socket.core.EventManager;
+import socket.event.PushEvent;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.FishingBobberEntity;

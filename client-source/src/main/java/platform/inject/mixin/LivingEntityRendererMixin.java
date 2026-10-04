@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.Interface;
-import aethereal.render.ColorUtil;
+import socket.core.Socket;
+import socket.core.Interface;
+import socket.render.ColorUtil;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.model.EntityModel;

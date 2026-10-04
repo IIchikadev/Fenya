@@ -1,7 +1,7 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
+import socket.core.Socket;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.PlayerEntityRenderer;
 import net.minecraft.client.render.entity.state.PlayerEntityRenderState;

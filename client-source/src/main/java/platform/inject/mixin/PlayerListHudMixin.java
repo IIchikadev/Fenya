@@ -1,11 +1,11 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.Interface;
-import aethereal.core.InterfaceC0020Opcode;
-import aethereal.render.Animations;
-import aethereal.render.ColorUtil;
+import socket.core.Socket;
+import socket.core.Interface;
+import socket.core.InterfaceC0020Opcode;
+import socket.render.Animations;
+import socket.render.ColorUtil;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.PlayerListHud;
@@ -27,13 +27,13 @@ public abstract class PlayerListHudMixin {
     @ModifyArgs(method = {"render"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/DrawContext;fill(IIIII)V", ordinal = 2), require = 0)
     private void render(Args args, @Local(name = {"list"}) List<PlayerListEntry> list, @Local(name = {"w"}) int w) {
         if (Interface.mc.player != null && w < list.size() && Interface.mc.player.getUuid().equals(list.get(w).getProfile().getId())) {
-            args.set(4, Integer.valueOf(ColorUtil.applyAlphaToColor(Socket.getInstance().getModuleProcessor().o().a(aethereal.config.ThemeInfo.PRIMARY).toIntColor(), 0.5f)));
+            args.set(4, Integer.valueOf(ColorUtil.applyAlphaToColor(Socket.getInstance().getProcessors().themes().a(socket.config.ThemeInfo.PRIMARY).toIntColor(), 0.5f)));
         }
     }
 
     @Inject(method = {"setVisible"}, at = {@At("HEAD")})
     private void setVisible(boolean visible, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("TAB").c().booleanValue()) {
             animations.r().a(visible);
         }
@@ -41,7 +41,7 @@ public abstract class PlayerListHudMixin {
 
     @Inject(method = {"render"}, at = {@At("HEAD")})
     private void headRender(DrawContext context, int scaledWindowWidth, Scoreboard scoreboard, @Nullable ScoreboardObjective objective, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("TAB").c().booleanValue()) {
             context.getMatrices().push();
             context.getMatrices().translate(0.0f, (-200.0f) * (1.0f - animations.r().c()), 0.0f);
@@ -50,7 +50,7 @@ public abstract class PlayerListHudMixin {
 
     @Inject(method = {"render"}, at = {@At("RETURN")})
     private void render(DrawContext context, int scaledWindowWidth, Scoreboard scoreboard, @Nullable ScoreboardObjective objective, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("TAB").c().booleanValue()) {
             context.getMatrices().pop();
         }

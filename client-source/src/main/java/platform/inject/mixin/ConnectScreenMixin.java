@@ -1,7 +1,7 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
+import socket.core.Socket;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
@@ -18,6 +18,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public class ConnectScreenMixin {
     @Inject(method = {"connect(Lnet/minecraft/client/gui/screen/Screen;Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/network/ServerAddress;Lnet/minecraft/client/network/ServerInfo;ZLnet/minecraft/client/network/CookieStorage;)V"}, at = {@At("HEAD")})
     private static void connect(Screen screen, MinecraftClient client, ServerAddress address, ServerInfo info, boolean quickPlay, @Nullable CookieStorage cookieStorage, CallbackInfo ci) {
-        Socket.getInstance().getModuleProcessor().v().getMainHandler().a(info);
+        Socket.getInstance().getProcessors().handlers().getMainHandler().a(info);
     }
 }

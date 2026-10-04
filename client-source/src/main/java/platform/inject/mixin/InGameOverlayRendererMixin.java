@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.RemovalsEvent;
+import socket.core.EventManager;
+import socket.event.RemovalsEvent;
 import net.minecraft.client.gui.hud.InGameOverlayRenderer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.texture.Sprite;

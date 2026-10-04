@@ -1,12 +1,12 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.EventManager;
-import aethereal.event.CameraPositionEvent;
-import aethereal.event.RemovalsEvent;
-import aethereal.event.RotationEvent;
-import aethereal.render.Animations;
+import socket.core.Socket;
+import socket.core.EventManager;
+import socket.event.CameraPositionEvent;
+import socket.event.RemovalsEvent;
+import socket.event.RotationEvent;
+import socket.render.Animations;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.block.enums.CameraSubmersionType;
 import net.minecraft.client.render.Camera;
@@ -52,7 +52,7 @@ public abstract class CameraMixin {
 
     @Inject(method = {"clipToSpace"}, at = {@At("HEAD")}, cancellable = true)
     private void onClipToSpace(float desiredCameraDistance, CallbackInfoReturnable<Float> info) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         RemovalsEvent event = new RemovalsEvent(RemovalsEvent.type.CLIP);
         EventManager.a(event);
         if (animations.m()) {

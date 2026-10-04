@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.PushEvent;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.PushEvent;
 import net.minecraft.entity.player.PlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

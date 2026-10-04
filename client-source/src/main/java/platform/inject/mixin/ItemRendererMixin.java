@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
-import aethereal.core.Socket;
-import aethereal.module.render.EnchantGlow;
-import aethereal.render.TintedVertexConsumer;
+import socket.core.Socket;
+import socket.module.render.EnchantGlow;
+import socket.render.TintedVertexConsumer;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
@@ -21,7 +21,7 @@ public class ItemRendererMixin {
             return original;
         }
         try {
-            EnchantGlow module = Socket.getInstance().getModuleProcessor().t().bs();
+            EnchantGlow module = Socket.getInstance().getProcessors().modules().enchantGlow();
             if (!module.m()) {
                 return original;
             }

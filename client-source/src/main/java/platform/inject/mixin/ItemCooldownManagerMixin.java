@@ -1,7 +1,7 @@
 package platform.inject.mixin;
 
 
-import aethereal.mixin.IItemCooldownManager;
+import socket.mixin.IItemCooldownManager;
 import net.minecraft.component.DataComponentTypes;
 import net.minecraft.component.type.PotionContentsComponent;
 import net.minecraft.entity.effect.StatusEffects;

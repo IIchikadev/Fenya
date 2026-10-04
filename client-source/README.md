@@ -1,82 +1,89 @@
-# Socket Client — рабочая база
+# Socket Client — клиент
 
-Вспомогательный (не читерский) клиент: информация, память, удобство ввода и
-производительность. Собран из донорской кодовой базы (Fabric 1.21.4) с вырезанными
-читерскими модулями. Декоративный визуал вырезан отдельным заходом — остались только
-украшения модели игрока (Adornments, Cape, ChinaHat, EnchantGlow) и косметика.
+Клиент для Minecraft 1.21.4 на Fabric: информация, память, удобство ввода, визуал и
+производительность. Собран из донорской кодовой базы с вырезанными читерскими модулями.
 
 ## Сборка
 
 ```bash
-export JAVA_HOME="/c/Program Files/Microsoft/jdk-21.0.12.101-hotspot"
+export JAVA_HOME=/path/to/jdk-21
 ./gradlew build          # jar в build/libs/
 ./gradlew compileJava    # быстрая проверка компиляции
 ```
 
-JDK 21 (Microsoft OpenJDK) стоит в `C:\Program Files\Microsoft\jdk-21.0.12.101-hotspot`.
-Запуск сразу в мир: `node ../socket-loader/scripts/devlaunch.js "New World"`.
+Нужен JDK 21. Запуск сразу в мир: `node ../loader-source/scripts/devlaunch.js "New World"`.
 
-## Что осталось из модулей (29)
+## Модули (37)
 
 | Категория | Модули |
 |---|---|
-| Визуал (7) | Adornments, Cape, ChinaHat, EnchantGlow, ItemPhysic, FullBright, Removals |
-| Камера (7) | Zoom, Freelook, MotionBlur, AspectRatio, ViewModel, SwingAnimation, Animations |
-| Интерфейс (7) | Interface, ItemInfo, ItemHighlight, DeathCoords, RadialMenu, ChatHelper, StreamerMode |
-| Разное (8) | InventorySort, ItemScroller, ElytraSwap, AutoSwap, Optimization, Sprint, Sounds, SoundReducer |
+| Визуал (Render, 13) | Adornments, Bloom, Cape, ChinaHat, CustomFog, EnchantGlow, FakePlayer, FullBright, ItemPhysic, Removals, Saturation, SkyShader |
+| Камера и анимации (7) | AspectRatio, ChunkAnimator, Freelook, MotionBlur, SwingAnimation, ViewModel, Zoom |
+| Интерфейс (Hud, 7) | ChatHelper, DeathCoords, Interface, ItemHighlight, ItemInfo, RadialMenu, StreamerMode |
+| Разное (Misc, 10) | AuctionHelper, AutoResell, AutoSwap, ElytraSwap, FastPlace, InventorySort, ItemScroller, Optimization, SoundReducer, Sounds, Sprint |
 
-Категории выровнены по размеру (7/7/7/8). Прежняя «Анимации» переименована в «Камера»:
-там собраны зум, freelook, смаз, соотношение сторон и настройки рук.
+Список собран по аннотациям `@ModuleRegister` в `src/main/java/socket/module`.
 
+> Часть модулей автоматизирует действия (`AutoResell` сам повторяет `/ah` и перевыставляет лоты,
+> `AutoSwap`, `ElytraSwap`, `FastPlace`) и на некоторых серверах может нарушать правила.
+> Проверяйте правила сервера перед использованием.
 
-## Что вырезано
+## Структура кода
 
-- **Combat целиком** — Aura, TriggerBot, AimAssistant, AntiBot, AutoTotem, AutoArmor,
-  MaceHelper, Velocity, HitBoxes и остальные 24 модуля, вместе с `AuraHandler`,
-  `AimHandler`, `PvEHandler`, `ANFindHandler` и `RotationProcessor` (спуф поворотов).
-- **Movement-читы** — Fly, Scaffold, WallClimb, AirStuck, NoSlowDown, SafeWalk,
-  FreeCamera, WaterJump, FastBreak, NoDelay и др.
-- **ESP/X-Ray** — EntityESP, BlockESP, ShaderESP, SoundESP, WardenESP, SeeInvisibles,
-  XRay, Predictions, Pointers, EntityBox.
-- **Автоматизация игры и рынка** — AutoBuy, Collector, ServerAssistant, MineAssistant,
-  AucReissue, AutoFish, AutoEat, ChestStealer, Nuker, фермы, `FunPay`-интеграция
-  (`ChatPoller`, `OrderPoller`), экран `StationScreen`, команда `/ah`.
-- **Прочее** — CaptchaSolver, PortalBypass, FastLoad, NoServerPack, NoCommands,
-  ItemScroller, OpenWalls, макро-команды `/vclip`, `/hclip`, `/blockesp`, `/warden`.
-- **Чат-команды целиком** — весь пакет клиентских команд с префиксом `.`
-  (`.way`, `.gps`, `.layout`, `.rct`, `.macros`, `.friend`, `.staff`, `.config`,
-  `.bind`, `.cc`), диспетчер `CommandProcessor`, подсказки `ChatInputSuggestorMixin`
-  и хук `sendChatMessage`. Вместе с ними ушли макросы (`aethereal.macro`) и
-  сохранение раскладок (`layouts` в конфиге). В пакете `aethereal.command` остались
-  только `CommandExecutor` и `CommandException` — это RPC Discord, к чату отношения
-  не имеют.
-- **Стафф-детект** — виджет `StaffWidget`, `aethereal.staff`, пункт «Стафф»
-  в настройках `Interface` и неиспользуемый шрифт значков `assets/socket/font/prefixes.json`.
-- **Декоративный визуал** (при повороте в сторону вспомогательного клиента) — Trails,
-  WorldParticles, HitParticles, HitBubbles, JumpCircle, KillEffect, TotemParticles,
-  HitEffects, Bloom, WorldTint, WeatherEffects, HandsShader, BlockBreakEffects, Ambience,
-  Crosshair, Nametags, ScoreboardVisual, ChatVisual, вместе с `ParticleEngine`,
-  `RingEngine`, `VisualUtil`, `ChatBackgroundMixin` и пакетом `aethereal.ambience`.
-  Резервная копия исходников до чистки — `../_backup/`.
+Пакет `socket` (бывший `aethereal`), миксины лежат отдельно в `platform.inject`.
 
-Хуки миксинов, которые обслуживали удалённое, тоже сняты (см. историю правок в
-`platform/inject/mixin`). Скрипт первичной чистки — `tools/strip_cheats.py`.
+| Пакет | Что внутри |
+|---|---|
+| `socket.core` | Точка входа `Socket`, контейнер процессоров `Processor`, шина событий |
+| `socket.module.*` | Модули по категориям (`render`, `misc`, `player`, `movement`, `combat`) |
+| `socket.config` | Процессоры конфигов и тем, реестр модулей `ModuleProcessor` |
+| `socket.ui` | Экраны, виджеты HUD, элементы и шейдеры интерфейса |
+| `socket.render` | 2D/3D-отрисовка, пакетный рендер `BatchProcessor`, анимации |
+| `socket.handler` | Обработчики событий игры (инвентарь, ввод, TPS) |
+| `socket.event` | Классы событий |
+| `socket.discord` | Discord RPC |
+| `socket.lib.*` | Встроенные копии сторонних библиотек (javassist, jsoup, log4j, json) |
+| `platform.inject` | Миксины, аксессоры и инвокеры Minecraft |
+
+### Как добраться до нужного объекта
+
+Все процессоры доступны через синглтон:
+
+```java
+Socket.getInstance().getProcessors().themes()      // ThemeProcessor
+Socket.getInstance().getProcessors().modules()     // ModuleProcessor (реестр модулей)
+Socket.getInstance().getProcessors().modules().zoom()   // конкретный модуль
+Socket.getInstance().getProcessors().handlers()    // HandlerProcessor
+```
+
+Геттеры `Processor`: `friends`, `discord`, `accounts`, `draw2D`, `draw3D`, `batch`,
+`notifications`, `resourcePacks`, `themes`, `cosmetics`, `drag`, `modules`, `handlers`.
+Геттеры модулей в `ModuleProcessor` названы по классу (`sprint()`, `zoom()`, `streamerMode()`…).
+
+Код во многих местах получен декомпиляцией, поэтому в старых классах ещё встречаются
+короткие имена вроде `a()`, `b()`, `c()`. Они переименовываются постепенно.
+
+## Что сделано
+
+- Вырезаны читерские модули, команды чата, стафф-детект и декоративный визуал
+  (подробности — в истории git и `tools/strip_cheats.py`).
+- Удалены остатки автоматизации: каталог `AutoBuyEntry`, экран `AssistantScreen`,
+  `UseableHandler`, фильтры предметов и проверка `BotFilter`.
+- Пакеты `aethereal` переименованы в `socket`.
+- HUD-виджеты `TargetWidget` и `EnvironmentWidget` берут цель из прицела
+  (игрок в пределах досягаемости); в открытом чате `TargetWidget` показывает вас самих,
+  чтобы виджет можно было перетащить.
 
 ## Что осталось сделать
 
-1. Перенести GUI из Zenith (`zenith/zov/client/screens`, `zenith/ui`) вместо текущего
-   `aethereal/ui`.
-2. Переименовать пакеты `aethereal` → `socket`. Брендинг ресурсов и Gradle уже
-   переведён (`gradle.properties`, `fabric.mod.json`, `assets/socket/`).
-3. HUD-виджеты `TargetWidget` и `EnvironmentWidget` остались без источника цели
-   (раньше брали её из Aura/TriggerBot) — либо переписать на цель под прицелом,
-   либо убрать.
-4. Проверить клиент в игре: сборка компилируется и remap-ится, запуск в мир — через
-   `../socket-loader/scripts/devlaunch.js`.
+1. Перенести GUI из Zenith вместо текущего `socket/ui`.
+2. Продолжить переименование коротких имён методов (`a()`, `b()`…) в старых классах.
+3. Проверить клиент в игре: сборка компилируется и remap-ится, запуск в мир — через
+   `devlaunch.js`.
 
 ## HUD
 
-Общий визуальный язык виджетов («приборная панель») собран в `aethereal/ui/widget/HudSkin.java`:
+Общий визуальный язык виджетов («приборная панель») собран в `socket/ui/widget/HudSkin.java`:
 плоские матовые плашки со скруглением 3, волосяная рамка, блик по верхней кромке, акцентная
 линия снизу с затуханием вправо, метка канала слева в шапке, волосяные разделители, сплошные
 шкалы с яркой ведущей кромкой. Базовые примитивы вызываются из `Widget`, поэтому стиль

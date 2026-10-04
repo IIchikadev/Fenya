@@ -1,13 +1,13 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.CooldownEvent;
-import aethereal.event.SyncEvent;
-import aethereal.mixin.IStatusEffectInstance;
-import aethereal.render.AnimationUtil;
+import socket.core.Socket;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.CooldownEvent;
+import socket.event.SyncEvent;
+import socket.mixin.IStatusEffectInstance;
+import socket.render.AnimationUtil;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.network.ClientPlayNetworkHandler;
 import net.minecraft.client.toast.Toast;

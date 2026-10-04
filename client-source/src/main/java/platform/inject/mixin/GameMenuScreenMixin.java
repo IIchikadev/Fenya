@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Interface;
-import aethereal.core.InterfaceC0020Opcode;
-import aethereal.util.ServerUtil;
+import socket.core.Interface;
+import socket.core.InterfaceC0020Opcode;
+import socket.util.ServerUtil;
 import net.minecraft.client.gui.screen.GameMenuScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.TitleScreen;

@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.mixin.IItemCooldownManager;
-import aethereal.render.AnimationUtil;
+import socket.mixin.IItemCooldownManager;
+import socket.render.AnimationUtil;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 

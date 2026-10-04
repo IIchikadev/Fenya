@@ -1,11 +1,11 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.BoundingBoxEvent;
-import aethereal.event.RemovalsEvent;
+import socket.core.Socket;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.BoundingBoxEvent;
+import socket.event.RemovalsEvent;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.Entity;

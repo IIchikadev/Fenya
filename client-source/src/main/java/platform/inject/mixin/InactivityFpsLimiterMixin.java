@@ -1,10 +1,10 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Interface;
-import aethereal.core.InterfaceC0020Opcode;
-import aethereal.ui.screen.AltScreen;
-import aethereal.ui.screen.MainScreen;
+import socket.core.Interface;
+import socket.core.InterfaceC0020Opcode;
+import socket.ui.screen.AltScreen;
+import socket.ui.screen.MainScreen;
 import net.minecraft.client.option.InactivityFpsLimiter;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

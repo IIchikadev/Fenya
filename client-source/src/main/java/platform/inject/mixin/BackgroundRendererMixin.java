@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.AmbienceEvent;
-import aethereal.event.RemovalsEvent;
+import socket.core.EventManager;
+import socket.event.AmbienceEvent;
+import socket.event.RemovalsEvent;
 import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.render.BackgroundRenderer;

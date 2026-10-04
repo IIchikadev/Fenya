@@ -1,15 +1,15 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.ContainerEvent;
-import aethereal.event.KeyEvent;
-import aethereal.lib.javassist.TokenId;
-import aethereal.mixin.ISlot;
-import aethereal.render.Animations;
-import aethereal.ui.screen.SwapScreen;
+import socket.core.Socket;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.ContainerEvent;
+import socket.event.KeyEvent;
+import socket.lib.javassist.TokenId;
+import socket.mixin.ISlot;
+import socket.render.Animations;
+import socket.ui.screen.SwapScreen;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.widget.ButtonWidget;
@@ -52,8 +52,8 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
 
     @Inject(method = {"drawSlot"}, at = {@At("HEAD")})
     private void onDrawSlotHead(DrawContext context, Slot slot, CallbackInfo ci) {
-        Socket.getInstance().getModuleProcessor().t().auctionHelper().drawSlot(context, slot);
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Socket.getInstance().getProcessors().modules().auctionHelper().drawSlot(context, slot);
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Предметы").c().booleanValue()) {
             boolean focused = slot == ((HandledScreenAccessor) this).getFocusedSlot() && slot.hasStack();
             float scale = ((ISlot) slot).getAnimation().a(focused ? 1.25f : 1.0f, focused ? 1.25f : 0.75f);
@@ -66,7 +66,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
 
     @Inject(method = {"drawSlot"}, at = {@At("RETURN")})
     private void onDrawSlotTail(DrawContext context, Slot slot, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Предметы").c().booleanValue()) {
             context.getMatrices().pop();
         }
@@ -83,7 +83,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
     private void onInit(CallbackInfo ci) {
         int iMethod_17388;
         if ((this.handler instanceof GenericContainerScreenHandler) || (this.handler instanceof ShulkerBoxScreenHandler)) {
-            Socket.getInstance().getModuleProcessor().v().performNoOperation();
+            Socket.getInstance().getProcessors().handlers().performNoOperation();
             HandledScreenAccessor screen = (HandledScreenAccessor) this;
             ScreenAccessor screenBase = (ScreenAccessor) this;
             GenericContainerScreenHandler class_1707Var = this.handler instanceof GenericContainerScreenHandler ? (GenericContainerScreenHandler) this.handler : null;
@@ -174,7 +174,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
 
     @Inject(method = {"onMouseClick(Lnet/minecraft/screen/slot/Slot;IILnet/minecraft/screen/slot/SlotActionType;)V"}, at = {@At("HEAD")}, cancellable = true)
     private void onMouseClick(Slot slot, int slotId, int button, SlotActionType actionType, CallbackInfo ci) {
-        SwapScreen swapScreen = Socket.getInstance().getModuleProcessor().t().L().q();
+        SwapScreen swapScreen = Socket.getInstance().getProcessors().modules().autoSwap().q();
         if (swapScreen.b() && !slot.getStack().isEmpty()) {
             swapScreen.a(swapScreen.a(), slot.getStack());
             swapScreen.a(-1);
@@ -186,7 +186,7 @@ public abstract class HandledScreenMixin<T extends ScreenHandler> {
 
     @Inject(method = {"removed"}, at = {@At("HEAD")})
     private void onRemoved(CallbackInfo ci) {
-        SwapScreen swapMenu = Socket.getInstance().getModuleProcessor().t().L().q();
+        SwapScreen swapMenu = Socket.getInstance().getProcessors().modules().autoSwap().q();
         if (swapMenu.b()) {
             swapMenu.a(false);
         }

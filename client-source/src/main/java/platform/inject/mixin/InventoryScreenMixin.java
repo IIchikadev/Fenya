@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.Interface;
-import aethereal.render.Animations;
+import socket.core.Socket;
+import socket.core.Interface;
+import socket.render.Animations;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.screen.ingame.InventoryScreen;
@@ -44,7 +44,7 @@ public abstract class InventoryScreenMixin extends HandledScreen<PlayerScreenHan
 
     @Inject(method = {"render"}, at = {@At("HEAD")})
     private void headRender(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Открытие инвентаря").c().booleanValue()) {
             float value = animations.t().c();
             context.getMatrices().push();
@@ -59,7 +59,7 @@ public abstract class InventoryScreenMixin extends HandledScreen<PlayerScreenHan
 
     @Inject(method = {"render"}, at = {@At("RETURN")})
     private void render(DrawContext context, int mouseX, int mouseY, float delta, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Открытие инвентаря").c().booleanValue()) {
             context.getMatrices().pop();
         }

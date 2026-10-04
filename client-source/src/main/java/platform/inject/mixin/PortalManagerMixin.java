@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.PortalEvent;
+import socket.core.EventManager;
+import socket.event.PortalEvent;
 import net.minecraft.world.dimension.PortalManager;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

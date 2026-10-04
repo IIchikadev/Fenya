@@ -1,7 +1,7 @@
 package platform.inject.mixin;
 
 
-import aethereal.mixin.IItemEntityRenderState;
+import socket.mixin.IItemEntityRenderState;
 import net.minecraft.client.render.entity.state.ItemEntityRenderState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

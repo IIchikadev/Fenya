@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.mixin.ISlot;
-import aethereal.render.AnimationUtil;
+import socket.mixin.ISlot;
+import socket.render.AnimationUtil;
 import net.minecraft.screen.slot.Slot;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;

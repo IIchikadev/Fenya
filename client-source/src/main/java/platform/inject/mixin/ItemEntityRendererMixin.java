@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.mixin.IItemEntityRenderState;
-import aethereal.module.render.ItemPhysic;
+import socket.core.Socket;
+import socket.mixin.IItemEntityRenderState;
+import socket.module.render.ItemPhysic;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.render.VertexConsumerProvider;
@@ -29,7 +29,7 @@ public class ItemEntityRendererMixin {
 
     @Redirect(method = {"render(Lnet/minecraft/client/render/entity/state/ItemEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;translate(FFF)V"))
     private void translate(MatrixStack matrices, float x, float y, float z) {
-        if (Socket.getInstance().getModuleProcessor().t().ag().m()) {
+        if (Socket.getInstance().getProcessors().modules().itemPhysic().m()) {
             y = 0.0f;
         }
         matrices.translate(x, y, z);
@@ -37,14 +37,14 @@ public class ItemEntityRendererMixin {
 
     @Redirect(method = {"render(Lnet/minecraft/client/render/entity/state/ItemEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/util/math/MatrixStack;multiply(Lorg/joml/Quaternionf;)V"))
     private void cancelHover(MatrixStack matrices, Quaternionf quaternion) {
-        if (!Socket.getInstance().getModuleProcessor().t().ag().m()) {
+        if (!Socket.getInstance().getProcessors().modules().itemPhysic().m()) {
             matrices.multiply(quaternion);
         }
     }
 
     @Inject(method = {"render(Lnet/minecraft/client/render/entity/state/ItemEntityRenderState;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;I)V"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/client/render/entity/ItemEntityRenderer;renderStack(Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;ILnet/minecraft/client/render/entity/state/ItemStackEntityRenderState;Lnet/minecraft/util/math/random/Random;)V", shift = At.Shift.BEFORE)})
     private void applyPhysics(ItemEntityRenderState state, MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, CallbackInfo ci) {
-        ItemPhysic itemPhysic = Socket.getInstance().getModuleProcessor().t().ag();
+        ItemPhysic itemPhysic = Socket.getInstance().getProcessors().modules().itemPhysic();
         if (itemPhysic.m()) {
             if (itemPhysic.q().c().booleanValue()) {
                 matrices.scale(0.5f, 0.5f, 0.5f);

@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.Interface;
-import aethereal.core.InterfaceC0020Opcode;
+import socket.core.Socket;
+import socket.core.Interface;
+import socket.core.InterfaceC0020Opcode;
 import net.minecraft.client.gui.screen.DisconnectedScreen;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.client.gui.screen.multiplayer.ConnectScreen;
@@ -30,7 +30,7 @@ public abstract class DisconnectedScreenMixin extends Screen {
 
     @Inject(method = {"init"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screen/DisconnectedScreen;refreshWidgetPositions()V", shift = At.Shift.BEFORE)})
     private void init(CallbackInfo ci) {
-        ServerInfo server = Socket.getInstance().getModuleProcessor().v().getMainHandler().a();
+        ServerInfo server = Socket.getInstance().getProcessors().handlers().getMainHandler().a();
         if (server != null) {
             this.buttonWidget = addDrawableChild(ButtonWidget.builder(Text.literal("Переподключиться"), btn -> {
                 ConnectScreen.connect(new MultiplayerScreen(null), Interface.mc, ServerAddress.parse(server.address), server, false, null);

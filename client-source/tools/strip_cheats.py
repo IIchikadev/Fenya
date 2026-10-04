@@ -10,7 +10,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SRC = ROOT / "src/main/java/aethereal"
+SRC = ROOT / "src/main/java/socket"
 MP = SRC / "config/ModuleProcessor.java"
 
 # Модули, которые остаются в клиенте.

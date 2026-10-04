@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.RemovalsEvent;
+import socket.core.EventManager;
+import socket.event.RemovalsEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleManager;

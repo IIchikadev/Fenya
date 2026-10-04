@@ -1,10 +1,10 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.core.InterfaceC0020Opcode;
-import aethereal.event.*;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.core.InterfaceC0020Opcode;
+import socket.event.*;
 import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.client.render.Camera;
 import net.minecraft.client.render.GameRenderer;
@@ -44,12 +44,12 @@ public class GameRendererMixin implements Interface {
 
     @Inject(method = "renderWorld", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", ordinal = 0))
     private void socketWorldEffects(RenderTickCounter counter, CallbackInfo ci) {
-        aethereal.render.WorldEffects.render(true);
+        socket.render.WorldEffects.render(true);
     }
 
     @Inject(method = "renderWorld", at = @At("RETURN"))
     private void socketHandEffects(RenderTickCounter counter, CallbackInfo ci) {
-        aethereal.render.WorldEffects.render(false);
+        socket.render.WorldEffects.render(false);
     }
 
     @Inject(method = {"renderHand"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameOverlayRenderer;renderOverlays(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V")})
@@ -105,7 +105,7 @@ public class GameRendererMixin implements Interface {
     @com.llamalad7.mixinextras.injector.ModifyReturnValue(method = {"getFov"}, at = {@At("RETURN")})
     private float onGetFov(float original) {
         try {
-            aethereal.module.misc.Zoom zoom = aethereal.core.Socket.getInstance().getModuleProcessor().t().cb();
+            socket.module.misc.Zoom zoom = socket.core.Socket.getInstance().getProcessors().modules().zoom();
             return zoom.m() ? zoom.a(original) : original;
         } catch (Throwable ignored) {
             return original;

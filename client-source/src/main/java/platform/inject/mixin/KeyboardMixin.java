@@ -1,10 +1,10 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.KeyEvent;
-import aethereal.ui.screen.SwapScreen;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.KeyEvent;
+import socket.ui.screen.SwapScreen;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import org.spongepowered.asm.mixin.Mixin;

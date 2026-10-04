@@ -1,10 +1,10 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.TooltipEvent;
+import socket.core.Socket;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.TooltipEvent;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;

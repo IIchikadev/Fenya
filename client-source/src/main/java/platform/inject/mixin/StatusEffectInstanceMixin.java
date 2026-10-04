@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.mixin.IStatusEffectInstance;
-import aethereal.render.AnimationUtil;
+import socket.mixin.IStatusEffectInstance;
+import socket.render.AnimationUtil;
 import net.minecraft.entity.effect.StatusEffect;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.registry.entry.RegistryEntry;

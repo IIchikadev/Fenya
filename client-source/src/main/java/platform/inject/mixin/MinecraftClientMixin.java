@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.*;
-import aethereal.event.HotbarEvent;
-import aethereal.ui.screen.GUIScreen;
+import socket.core.*;
+import socket.event.HotbarEvent;
+import socket.ui.screen.GUIScreen;
 import net.minecraft.client.Keyboard;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.screen.DownloadingTerrainScreen;
@@ -91,7 +91,7 @@ public abstract class MinecraftClientMixin implements Interface {
 
     @Redirect(method = {"handleInputEvents"}, at = @At(value = "INVOKE", target = "Lnet/minecraft/client/network/ClientPlayerInteractionManager;stopUsingItem(Lnet/minecraft/entity/player/PlayerEntity;)V"))
     private void handleInputEvents(ClientPlayerInteractionManager manager, PlayerEntity player) {
-        if (Socket.getInstance().getModuleProcessor().v().getInteractHandler().hasTasks()) {
+        if (Socket.getInstance().getProcessors().handlers().getInteractHandler().hasTasks()) {
             return;
         }
         if (player.isUsingItem()) {

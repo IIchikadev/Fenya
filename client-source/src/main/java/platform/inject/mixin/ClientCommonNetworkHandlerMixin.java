@@ -1,7 +1,7 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
+import socket.core.Socket;
 import net.minecraft.client.network.ClientCommonNetworkHandler;
 import net.minecraft.network.packet.c2s.common.ResourcePackStatusC2SPacket;
 import net.minecraft.network.packet.s2c.common.ResourcePackSendS2CPacket;

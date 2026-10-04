@@ -1,13 +1,13 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.ClickEvent;
-import aethereal.event.KeyEvent;
-import aethereal.event.LookEvent;
-import aethereal.event.ScrollEvent;
-import aethereal.ui.screen.SwapScreen;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.ClickEvent;
+import socket.event.KeyEvent;
+import socket.event.LookEvent;
+import socket.event.ScrollEvent;
+import socket.ui.screen.SwapScreen;
 import net.minecraft.client.Mouse;
 import net.minecraft.client.network.ClientPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;

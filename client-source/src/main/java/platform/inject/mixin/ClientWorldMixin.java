@@ -1,9 +1,9 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.EventManager;
-import aethereal.event.BlockChangeEvent;
-import aethereal.event.PotionEvent;
+import socket.core.EventManager;
+import socket.event.BlockChangeEvent;
+import socket.event.PotionEvent;
 import net.minecraft.block.BlockState;
 import net.minecraft.client.world.ClientWorld;
 import net.minecraft.entity.player.PlayerEntity;

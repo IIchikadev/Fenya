@@ -1,10 +1,10 @@
 package platform.inject.mixin;
 
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.*;
-import aethereal.util.Look;
-import aethereal.util.MoveUtil;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.*;
+import socket.util.Look;
+import socket.util.MoveUtil;
 import net.minecraft.client.input.Input;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.util.PlayerInput;

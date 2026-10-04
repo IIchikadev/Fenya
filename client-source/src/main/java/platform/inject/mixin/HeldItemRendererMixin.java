@@ -1,11 +1,11 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.EventManager;
-import aethereal.event.HandAnimationEvent;
-import aethereal.event.HandViewEvent;
-import aethereal.util.Look;
+import socket.core.Socket;
+import socket.core.EventManager;
+import socket.event.HandAnimationEvent;
+import socket.event.HandViewEvent;
+import socket.util.Look;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;

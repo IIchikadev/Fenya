@@ -1,10 +1,10 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.event.RemovalsEvent;
+import socket.core.Socket;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.event.RemovalsEvent;
 import net.minecraft.client.render.Fog;
 import net.minecraft.client.render.FrameGraphBuilder;
 import net.minecraft.client.render.WorldRenderer;
@@ -20,7 +20,7 @@ public class WorldRendererMixin implements Interface {
     @org.spongepowered.asm.mixin.injection.ModifyArgs(method = "renderLayer", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gl/GlUniform;set(FFF)V", ordinal = 0))
     private void socketChunkOffset(org.spongepowered.asm.mixin.injection.invoke.arg.Args args,
             @com.llamalad7.mixinextras.sugar.Local net.minecraft.util.math.BlockPos origin) {
-        float[] offset = Socket.getInstance().getModuleProcessor().t().chunkAnimator().offset(origin);
+        float[] offset = Socket.getInstance().getProcessors().modules().chunkAnimator().offset(origin);
         if (offset != null) for (int i = 0; i < 3; i++) args.set(i, (float)args.get(i) + offset[i]);
     }
     @Inject(method = {"renderWeather"}, at = {@At("HEAD")}, cancellable = true)

@@ -1,8 +1,8 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Interface;
-import aethereal.ui.screen.MainScreen;
+import socket.core.Interface;
+import socket.ui.screen.MainScreen;
 import net.minecraft.client.gui.screen.TitleScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

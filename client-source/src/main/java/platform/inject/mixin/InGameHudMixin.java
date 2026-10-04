@@ -1,16 +1,16 @@
 package platform.inject.mixin;
 
 
-import aethereal.core.Socket;
-import aethereal.core.EventManager;
-import aethereal.core.Interface;
-import aethereal.core.InterfaceC0020Opcode;
-import aethereal.event.CrosshairEvent;
-import aethereal.event.DrawEvent;
-import aethereal.event.RemovalsEvent;
-import aethereal.event.ScoreboardEvent;
-import aethereal.render.Animations;
-import aethereal.render.ColorUtil;
+import socket.core.Socket;
+import socket.core.EventManager;
+import socket.core.Interface;
+import socket.core.InterfaceC0020Opcode;
+import socket.event.CrosshairEvent;
+import socket.event.DrawEvent;
+import socket.event.RemovalsEvent;
+import socket.event.ScoreboardEvent;
+import socket.render.Animations;
+import socket.render.ColorUtil;
 import net.minecraft.client.font.TextRenderer;
 import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.hud.InGameHud;
@@ -87,8 +87,8 @@ public class InGameHudMixin {
     @Inject(method = {"render"}, at = {@At("HEAD")})
     public void headRender(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
         context.draw();
-        try (aethereal.render.RenderState state = new aethereal.render.RenderState(false)) {
-            Socket.getInstance().getModuleProcessor().i().e().a(context.getMatrices());
+        try (socket.render.RenderState state = new socket.render.RenderState(false)) {
+            Socket.getInstance().getProcessors().draw2D().e().a(context.getMatrices());
             EventManager.a(new DrawEvent(context, tickCounter.getTickDelta(false), DrawEvent.a.D2D));
             context.draw();
         }
@@ -96,7 +96,7 @@ public class InGameHudMixin {
 
     @Inject(method = {"render"}, at = {@At("TAIL")})
     private void render(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("TAB").c().booleanValue() && animations.r().c() > 0.0f && !Interface.mc.options.playerListKey.isPressed()) {
             this.playerListHud.render(context, Interface.mc.getWindow().getScaledWidth(), Interface.mc.world.getScoreboard(), Interface.mc.world.getScoreboard().getObjectiveForSlot(ScoreboardDisplaySlot.LIST));
         }
@@ -104,7 +104,7 @@ public class InGameHudMixin {
 
     @Inject(method = {"renderMainHud"}, at = {@At("HEAD")})
     private void headRenderMainHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Поднятие хотбара").c().booleanValue()) {
             context.getMatrices().push();
             context.getMatrices().translate(0.0f, (-16.0f) * animations.s().c(), 0.0f);
@@ -113,7 +113,7 @@ public class InGameHudMixin {
 
     @Inject(method = {"renderMainHud"}, at = {@At("RETURN")})
     private void renderMainHud(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Поднятие хотбара").c().booleanValue()) {
             context.getMatrices().pop();
         }
@@ -121,7 +121,7 @@ public class InGameHudMixin {
 
     @ModifyArg(method = {"renderHotbar"}, index = 2, at = @At(value = "INVOKE", ordinal = 1, target = "Lnet/minecraft/client/gui/DrawContext;drawGuiTexture(Ljava/util/function/Function;Lnet/minecraft/util/Identifier;IIII)V"))
     private int hotbarSelectionSlot(int x) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Слот хотбара").c().booleanValue() && Interface.mc.player != null) {
             return Math.round((x - (Interface.mc.player.getInventory().selectedSlot * 20)) + (animations.v() * 20.0f));
         }
@@ -130,7 +130,7 @@ public class InGameHudMixin {
 
     @Inject(method = {"renderExperienceLevel"}, at = {@At("HEAD")})
     private void headRenderExperienceLevel(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Поднятие хотбара").c().booleanValue()) {
             context.getMatrices().push();
             context.getMatrices().translate(0.0f, (-16.0f) * animations.s().c(), 0.0f);
@@ -139,7 +139,7 @@ public class InGameHudMixin {
 
     @Inject(method = {"renderExperienceLevel"}, at = {@At("RETURN")})
     private void renderExperienceLevel(DrawContext context, RenderTickCounter tickCounter, CallbackInfo ci) {
-        Animations animations = Socket.getInstance().getModuleProcessor().t().Q();
+        Animations animations = Socket.getInstance().getProcessors().modules().animations();
         if (animations.m() && animations.q().a("Поднятие хотбара").c().booleanValue()) {
             context.getMatrices().pop();
         }
