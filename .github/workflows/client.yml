@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Тег существующего релиза, к которому приложить ядро (например 1.1.0)'
+        description: 'Тег существующего релиза, к которому приложить ядро из выбранной ветки (например 1.1.0)'
         required: false
 
 permissions:
@@ -25,9 +25,8 @@ jobs:
       run:
         working-directory: client-source
     steps:
+      # собираем выбранную ветку или тег; при ручном запуске ядро прикладывается к релизу inputs.tag
       - uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.tag || github.ref }}
 
       - uses: actions/setup-java@v4
         with:
