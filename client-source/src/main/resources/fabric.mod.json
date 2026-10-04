@@ -1,0 +1,36 @@
+{
+  "accessWidener": "socket.accesswidener",
+  "schemaVersion": 1,
+  "id": "socket",
+  "version": "1.0.0",
+  "name": "Socket Client",
+  "description": "Визуальный клиент Socket для Minecraft",
+  "authors": [
+    "IIchika",
+    "Ramixy"
+  ],
+  "contact": {
+    "homepage": "https://socketclient.ru/",
+    "sources": "https://socketclient.ru/"
+  },
+  "license": "Minecraft EULA",
+  "icon": "assets/socket/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "platform.Initializer"
+    ]
+  },
+  "mixins": [
+    "socket.mixins.json"
+  ],
+  "custom": {
+    "socket:discordClientId": "1555668846294335598"
+  },
+  "depends": {
+    "fabricloader": "\u003e\u003d0.16.5",
+    "minecraft": "~1.21.4",
+    "java": "\u003e\u003d21",
+    "fabric-api": "*"
+  }
+}

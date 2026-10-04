@@ -1,0 +1,14 @@
+# Gradle / Java
+client-source/build/
+client-source/.gradle/
+client-source/run/
+*.log
+# Node / Electron
+loader-source/node_modules/
+loader-source/dist/
+# Сборки публикуются в Releases
+*.exe
+*.jar
+!client-source/gradle/wrapper/gradle-wrapper.jar
+# Служебное
+.zwork/

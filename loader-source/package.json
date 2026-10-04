@@ -1,0 +1,59 @@
+{
+  "name": "socket-loader",
+  "version": "1.0.0",
+  "description": "Лоадер Socket Client: ставит Minecraft 1.21.4 с Fabric и управляет модами",
+  "main": "src/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron .",
+    "obfuscate": "node scripts/pack.js",
+    "dist": "node scripts/pack.js --pack"
+  },
+  "build": {
+    "appId": "ru.socketclient.loader",
+    "productName": "Socket Loader",
+    "files": [
+      "src/**/*"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "src/ui/assets/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "shortcutName": "Socket Client",
+      "artifactName": "SocketClient-Loader-setup-${version}.exe"
+    },
+    "portable": {
+      "artifactName": "SocketClient-Loader-portable-${version}.exe"
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "dependencies": {
+    "adm-zip": "0.6.0"
+  },
+  "devDependencies": {
+    "electron": "44.0.0",
+    "electron-builder": "26.15.3",
+    "javascript-obfuscator": "5.6.0"
+  },
+  "allowScripts": {
+    "electron@44.0.0": true
+  }
+}
