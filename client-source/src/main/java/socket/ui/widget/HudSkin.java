@@ -5,6 +5,7 @@ import socket.config.ThemeProcessor;
 import socket.core.Socket;
 import socket.event.DrawEvent;
 import socket.render.ColorUtil;
+import socket.ui.GlassStyle;
 import org.joml.Vector4f;
 
 /**
@@ -63,6 +64,9 @@ public final class HudSkin {
                 ColorUtil.applyAlphaToColor(ColorUtil.a(255, 255, 255), 0.16f * animation));
         event.getDraw2DProcessor().a(event.h(), x, y, width, height, rack(), 0.5f,
                 ColorUtil.applyAlphaToColor(ColorUtil.a(255, 255, 255), 0.09f * animation));
+        if (GlassStyle.hud()) {
+            GlassStyle.sheen(event.getDraw2DProcessor(), event.h(), x, y, width, height, CORNER, animation);
+        }
         underline(event, x, y, width, height, animation, glow);
         bus(event, x, y, height, animation);
     }
@@ -75,6 +79,9 @@ public final class HudSkin {
         event.getDraw2DProcessor().b(event.h(), x, y, width, height, CORNER - 1.0f, backdrop(animation), animation);
         event.getDraw2DProcessor().a(event.h(), x, y, width, height, inner(), 0.5f,
                 ColorUtil.applyAlphaToColor(ColorUtil.a(255, 255, 255), 0.06f * animation));
+        if (GlassStyle.hud()) {
+            GlassStyle.sheen(event.getDraw2DProcessor(), event.h(), x, y, width, height, CORNER - 1.0f, animation);
+        }
     }
 
     private static int backdrop(float animation) {
@@ -82,7 +89,8 @@ public final class HudSkin {
         theme.a(ThemeInfo.BACKGROUND_HUD).setAlpha(170);
         int mixed = ColorUtil.lerpColor(theme.a(ThemeInfo.BACKGROUND_HUD).toIntColor(),
                 theme.a(ThemeInfo.PRIMARY).toIntColor(), theme.a(ThemeInfo.PRIMARY).getAlphaFloat() / 8.0f);
-        return ColorUtil.applyAlphaToColor(mixed, theme.a(ThemeInfo.BACKGROUND_HUD).getAlphaFloat() * animation);
+        int backdrop = ColorUtil.applyAlphaToColor(mixed, theme.a(ThemeInfo.BACKGROUND_HUD).getAlphaFloat() * animation);
+        return GlassStyle.hud() ? GlassStyle.tint(backdrop) : backdrop;
     }
 
     /** Акцентная линия по нижней кромке: слева ярче, к правому краю затухает. */

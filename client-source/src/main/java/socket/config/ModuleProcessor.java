@@ -50,6 +50,12 @@ public class ModuleProcessor extends ConfigProcessor<Module> {
     public ChunkAnimator chunkAnimator() { return chunkAnimator; }
     private final FastPlace fastPlace = new FastPlace();
     public FastPlace fastPlace() { return fastPlace; }
+    private final Glass glass = new Glass();
+    public Glass glass() { return glass; }
+    private final ContainerPreview containerPreview = new ContainerPreview();
+    public ContainerPreview containerPreview() { return containerPreview; }
+    private final InventoryProfiles inventoryProfiles = new InventoryProfiles();
+    public InventoryProfiles inventoryProfiles() { return inventoryProfiles; }
     private final Sprint o = new Sprint();
     private final SoundReducer r = new SoundReducer();
     private final DeathCoords J = new DeathCoords();
@@ -97,7 +103,7 @@ public class ModuleProcessor extends ConfigProcessor<Module> {
 
     public void setup() {
         this.bd = new Interface();
-        a(auctionHelper, autoResell, saturation, bloom, skyShader, customFog, fakePlayer, chunkAnimator, fastPlace);
+        a(auctionHelper, autoResell, saturation, bloom, skyShader, customFog, fakePlayer, chunkAnimator, fastPlace, glass, containerPreview, inventoryProfiles);
         a(this.J, this.aE, this.ao, this.Q, this.ag, this.r, this.as, this.R, this.ay, this.L, this.o, this.ai, this.bd, this.at, this.aB, this.aO, this.bj, this.bp, this.bq, this.br, this.bs, this.bt, this.cb, this.cc, this.cd, this.ce, this.cf, this.cg, this.ch);
         super.setup();
     }

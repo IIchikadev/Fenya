@@ -1,5 +1,6 @@
 package socket.ui.screen;
 
+import socket.ui.GlassStyle;
 import socket.config.ModuleProcessor;
 import socket.config.ThemeInfo;
 import socket.config.ThemeProcessor;
@@ -94,11 +95,18 @@ public class ConfigPanel {
         ThemeProcessor theme = Socket.getInstance().getProcessors().themes();
         int background = ColorUtil.combineColorWithAlpha(ColorUtil.lerpColor(theme.a(ThemeInfo.BACKGROUND_GUI).toIntColor(),
                 theme.a(ThemeInfo.PRIMARY).toIntColor(), theme.a(ThemeInfo.PRIMARY).getAlphaFloat() / 4.0f), 200);
+        boolean glass = GlassStyle.menu();
+        if (glass) {
+            background = GlassStyle.tint(background);
+        }
         context.getMatrices().push();
         context.getMatrices().translate((-(1.0f - fade)) * 12.0f, 0.0f, 0.0f);
         draw.a(context.getMatrices(), this.x, this.y, WIDTH, this.height, 8.0f, background, 1.0f, background, 16.0f);
         draw.a(context.getMatrices(), this.x, this.y, WIDTH, this.height, 8.0f, 0.5f,
                 theme.a(ThemeInfo.OUTLINE_MEDIUM).toIntColor());
+        if (glass) {
+            GlassStyle.sheen(draw, context.getMatrices(), this.x, this.y, WIDTH, this.height, 8.0f, 1.0f);
+        }
         int titleColor = ColorUtil.lerpColor(ColorUtil.convertToARGB(255, 255, 255, 255),
                 theme.a(ThemeInfo.PRIMARY).toIntColor(), 0.25f);
         Fonts.c.a(context.getMatrices(), "Конфиги", this.x + 10.0f,

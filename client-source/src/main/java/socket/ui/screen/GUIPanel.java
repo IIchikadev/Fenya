@@ -1,6 +1,7 @@
 package socket.ui.screen;
 
 
+import socket.ui.GlassStyle;
 import socket.config.ThemeInfo;
 import socket.config.ThemeProcessor;
 import socket.core.Category;
@@ -149,8 +150,15 @@ public class GUIPanel {
         matrices.scale(scale, scale, 1.0f);
         matrices.translate(-(this.a.x + (this.a.z / 2.0f)), -(this.a.y + (this.a.w / 2.0f)), 0.0f);
         int background = ColorUtil.combineColorWithAlpha(ColorUtil.lerpColor(theme.a(ThemeInfo.BACKGROUND_GUI).toIntColor(), theme.a(ThemeInfo.PRIMARY).toIntColor(), theme.a(ThemeInfo.PRIMARY).getAlphaFloat() / 4.0f), InterfaceC0020Opcode.aN);
+        boolean glass = GlassStyle.menu();
+        if (glass) {
+            background = GlassStyle.tint(background);
+        }
         draw.a(matrices, this.a.x, this.a.y, this.a.z, this.a.w, 8.0f, background, 1.0f, background, 16.0f);
         draw.a(matrices, this.a.x, this.a.y, this.a.z, this.a.w, 8.0f, 0.5f, theme.a(ThemeInfo.OUTLINE_MEDIUM).toIntColor());
+        if (glass) {
+            GlassStyle.sheen(draw, matrices, this.a.x, this.a.y, this.a.z, this.a.w, 8.0f, 1.0f);
+        }
         a(matrices, theme, 24.0f);
         a(context, mouseX, mouseY, this.a.y + 24.0f + 4.0f, delta);
         matrices.pop();
