@@ -2,7 +2,7 @@
   "accessWidener": "socket.accesswidener",
   "schemaVersion": 1,
   "id": "socket",
-  "version": "1.0.0",
+  "version": "${version}",
   "name": "Socket Client",
   "description": "Визуальный клиент Socket для Minecraft",
   "authors": [
