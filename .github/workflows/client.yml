@@ -3,9 +3,14 @@ name: Client
 on:
   push:
     branches: ['**']
-    tags: ['v*']
+    # теги релизов: v1.2.3 или 1.2.3
+    tags: ['v*', '[0-9]*']
   pull_request:
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Тег существующего релиза, к которому приложить ядро из выбранной ветки (например 1.1.0)'
+        required: false
 
 permissions:
   contents: write
@@ -13,10 +18,14 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # тег релиза: из ручного запуска или из пуша тега
+      RELEASE_TAG: ${{ inputs.tag || (github.ref_type == 'tag' && github.ref_name) || '' }}
     defaults:
       run:
         working-directory: client-source
     steps:
+      # собираем выбранную ветку или тег; при ручном запуске ядро прикладывается к релизу inputs.tag
       - uses: actions/checkout@v4
 
       - uses: actions/setup-java@v4
@@ -26,12 +35,12 @@ jobs:
 
       - uses: gradle/actions/setup-gradle@v4
 
-      # для тега v1.2.3 версия ядра берётся из тега, иначе — из gradle.properties
+      # для релиза версия ядра берётся из тега (без ведущей v), иначе — из gradle.properties
       - name: Build
         run: |
           chmod +x gradlew
-          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
-            ./gradlew build --no-daemon -Pversion="${GITHUB_REF_NAME#v}"
+          if [[ -n "$RELEASE_TAG" ]]; then
+            ./gradlew build --no-daemon -Pversion="${RELEASE_TAG#v}"
           else
             ./gradlew build --no-daemon
           fi
@@ -44,7 +53,8 @@ jobs:
 
       # лоадер ищет в релизах файл socket-client-*.jar
       - name: Attach core to release
-        if: startsWith(github.ref, 'refs/tags/v')
+        if: env.RELEASE_TAG != ''
         uses: softprops/action-gh-release@v2
         with:
+          tag_name: ${{ env.RELEASE_TAG }}
           files: client-source/build/libs/socket-client-*.jar

@@ -70,9 +70,12 @@ function pack() {
   manifest.build.asar = true;
   fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
   try {
-    // путь проекта содержит пробелы и кириллицу, поэтому запускаем через npx без ручной сборки командной строки
-    const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-    execFileSync(npx, ['--yes', 'electron-builder', '--win', '--x64'], { cwd: root, stdio: 'inherit', shell: false });
+    // запускаем CLI electron-builder тем же node: новые Node на Windows не дают вызывать npx.cmd без shell (EINVAL),
+    // а shell сломался бы на пробелах и кириллице в пути проекта
+    const builderDir = path.join(root, 'node_modules', 'electron-builder');
+    const builderManifest = JSON.parse(fs.readFileSync(path.join(builderDir, 'package.json'), 'utf8'));
+    const bin = typeof builderManifest.bin === 'string' ? builderManifest.bin : builderManifest.bin['electron-builder'];
+    execFileSync(process.execPath, [path.join(builderDir, bin), '--win', '--x64'], { cwd: root, stdio: 'inherit' });
   } finally {
     fs.writeFileSync(manifestPath, original, 'utf8');
   }
