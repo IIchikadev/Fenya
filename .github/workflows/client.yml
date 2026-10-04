@@ -1,0 +1,50 @@
+name: Client
+
+on:
+  push:
+    branches: ['**']
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: client-source
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: microsoft
+          java-version: '21'
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      # для тега v1.2.3 версия ядра берётся из тега, иначе — из gradle.properties
+      - name: Build
+        run: |
+          chmod +x gradlew
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            ./gradlew build --no-daemon -Pversion="${GITHUB_REF_NAME#v}"
+          else
+            ./gradlew build --no-daemon
+          fi
+          rm -f build/libs/*-sources.jar
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: socket-client
+          path: client-source/build/libs/socket-client-*.jar
+
+      # лоадер ищет в релизах файл socket-client-*.jar
+      - name: Attach core to release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: client-source/build/libs/socket-client-*.jar

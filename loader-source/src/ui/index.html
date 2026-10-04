@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<title>Socket Loader</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+<div class="grid-bg"></div>
+
+<header class="titlebar">
+  <div class="brand">
+    <img src="assets/logo-tile.png" alt="" class="brand-mark" />
+    <span class="brand-name">Socket Client</span>
+    <span class="brand-thin">лоадер</span>
+    <span class="chip mono" id="chip-version">1.21.4 · fabric</span>
+  </div>
+  <div class="win-buttons">
+    <button data-window="minimize" title="Свернуть"><svg viewBox="0 0 12 12"><path d="M2 6h8" /></svg></button>
+    <button data-window="maximize" title="Развернуть"><svg viewBox="0 0 12 12"><rect x="2.5" y="2.5" width="7" height="7" /></svg></button>
+    <button data-window="close" class="danger" title="Закрыть"><svg viewBox="0 0 12 12"><path d="M3 3l6 6M9 3l-6 6" /></svg></button>
+  </div>
+</header>
+
+<main class="shell">
+  <nav class="tabs">
+    <button class="tab active" data-view="play"><span class="dot"></span>Играть</button>
+    <button class="tab" data-view="mods"><span class="dot"></span>Моды</button>
+    <button class="tab" data-view="settings"><span class="dot"></span>Настройки</button>
+    <div class="tabs-foot mono">
+      <div id="java-chip">java: поиск…</div>
+      <div id="core-chip">ядро: —</div>
+    </div>
+  </nav>
+
+  <section class="view active" id="view-play">
+    <div class="hero">
+      <div class="hero-glow"></div>
+      <img src="assets/logo-main.png" alt="" class="hero-logo" />
+      <h1 class="display">Socket Client</h1>
+      <p class="sub">визуальный клиент для Minecraft 1.21.4 · максимум комфорта</p>
+
+      <div class="play-row">
+        <label class="field">
+          <span class="label mono">Ник</span>
+          <input id="nickname" type="text" maxlength="16" placeholder="Player" spellcheck="false" />
+        </label>
+        <label class="field field-mem">
+          <span class="label mono">Память <b id="memory-value">4096 МБ</b></span>
+          <input id="memory" type="range" min="1024" max="16384" step="512" />
+        </label>
+        <button class="btn btn-p btn-lg" id="play">
+          <svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z" /></svg>
+          <span id="play-label">Играть</span>
+        </button>
+      </div>
+
+      <div class="progress" id="progress">
+        <div class="progress-line"><i id="progress-fill"></i></div>
+        <div class="progress-meta mono"><span id="progress-text">готов к запуску</span><span id="progress-percent">0%</span></div>
+      </div>
+
+      <div class="update-banner" id="update-banner" hidden>
+        <span id="update-text">Доступна новая версия ядра</span>
+        <button class="btn btn-g" id="update-now">Обновить</button>
+      </div>
+
+      <details class="console">
+        <summary class="mono">Лог запуска</summary>
+        <pre id="log" class="mono"></pre>
+      </details>
+    </div>
+  </section>
+
+  <section class="view" id="view-mods">
+    <div class="view-head">
+      <div>
+        <h2 class="display">Моды</h2>
+        <p class="sub">перетащите .jar в окно или добавьте кнопкой — они попадут в инстанс клиента</p>
+      </div>
+      <div class="view-actions">
+        <button class="btn btn-g" id="mods-add">Добавить .jar</button>
+        <button class="btn btn-g" id="mods-folder">Папка модов</button>
+        <button class="btn btn-g" id="mods-core">Обновить ядро</button>
+      </div>
+    </div>
+    <div class="dropzone" id="dropzone"><span class="mono">отпустите файлы здесь</span></div>
+    <div class="mods-list" id="mods-list"></div>
+  </section>
+
+  <section class="view" id="view-settings">
+    <div class="view-head"><div><h2 class="display">Настройки</h2><p class="sub">инстанс, Java и поведение лоадера</p></div></div>
+    <div class="cards">
+      <div class="card">
+        <h3>Java</h3>
+        <p class="mono small" id="java-path">—</p>
+        <div class="row"><button class="btn btn-g" id="pick-java">Выбрать javaw.exe</button></div>
+      </div>
+      <div class="card">
+        <h3>Ядро клиента</h3>
+        <p class="mono small" id="core-status">проверяем релизы…</p>
+        <select class="select mono" id="core-versions" disabled><option>загрузка…</option></select>
+        <div class="row">
+          <button class="btn btn-g" id="core-install" disabled>Установить версию</button>
+          <button class="btn btn-g" id="core-check">Проверить обновления</button>
+        </div>
+        <label class="switch"><input type="checkbox" id="auto-update" /><span></span>Обновлять ядро автоматически</label>
+        <label class="switch"><input type="checkbox" id="allow-prerelease" /><span></span>Предварительные версии</label>
+      </div>
+      <div class="card">
+        <h3>Поведение</h3>
+        <label class="switch"><input type="checkbox" id="close-on-launch" /><span></span>Закрывать лоадер после запуска</label>
+        <label class="switch"><input type="checkbox" id="fullscreen" /><span></span>Запускать в полном экране</label>
+      </div>
+      <div class="card">
+        <h3>Инстанс</h3>
+        <p class="mono small" id="paths-info">—</p>
+        <div class="row"><button class="btn btn-g" id="reinstall">Переустановить игру</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>

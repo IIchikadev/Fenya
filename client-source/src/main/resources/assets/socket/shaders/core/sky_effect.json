@@ -1,0 +1,122 @@
+{
+  "uniforms": [
+    {
+      "name": "Time",
+      "count": 1,
+      "type": "float",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Mode",
+      "count": 1,
+      "type": "float",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Scale",
+      "count": 1,
+      "type": "float",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Intensity",
+      "count": 1,
+      "type": "float",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Aspect",
+      "count": 1,
+      "type": "float",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Fov",
+      "count": 1,
+      "type": "float",
+      "values": [
+        1.0
+      ]
+    },
+    {
+      "name": "Tint",
+      "count": 3,
+      "type": "float",
+      "values": [
+        0.2,
+        0.6,
+        1.0
+      ]
+    },
+    {
+      "name": "Camera",
+      "count": 2,
+      "type": "float",
+      "values": [
+        0.0,
+        0.0
+      ]
+    },
+    {
+      "values": [
+        1.0
+      ],
+      "type": "float",
+      "name": "Opacity",
+      "count": 1
+    },
+    {
+      "values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "type": "float",
+      "name": "Background",
+      "count": 3
+    },
+    {
+      "values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "type": "float",
+      "name": "Neon1",
+      "count": 3
+    },
+    {
+      "values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "type": "float",
+      "name": "Neon2",
+      "count": 3
+    },
+    {
+      "values": [
+        1.0,
+        1.0,
+        1.0
+      ],
+      "type": "float",
+      "name": "Neon3",
+      "count": 3
+    }
+  ],
+  "fragment": "socket:core/sky_effect",
+  "vertex": "socket:core/fullscreen",
+  "samplers": []
+}
