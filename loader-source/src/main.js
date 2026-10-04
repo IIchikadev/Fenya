@@ -6,6 +6,7 @@ const { paths, readSettings, writeSettings, MC_VERSION, FABRIC_LOADER } = requir
 const install = require('./core/install');
 const launcher = require('./core/launch');
 const mods = require('./core/mods');
+const updates = require('./core/updates');
 
 let window = null;
 let gameProcess = null;
@@ -38,7 +39,10 @@ function createWindow() {
     });
     window.webContents.on('devtools-opened', () => window.webContents.closeDevTools());
   }
-  window.once('ready-to-show', () => window.show());
+  window.once('ready-to-show', () => {
+    window.show();
+    checkCoreUpdate();
+  });
   window.on('closed', () => {
     window = null;
   });
@@ -50,6 +54,9 @@ function send(channel, payload) {
 
 /** Ищет собранный жар клиента рядом с лоадером — чтобы ставить ядро без ручного выбора. */
 function findCoreJar() {
+  // версия, выбранная или скачанная из релизов, важнее локальной сборки
+  const selected = updates.selectedJar();
+  if (selected) return selected;
   const candidates = [
     path.join(app.getAppPath(), '..', 'SocketClient', 'build', 'libs'),
     path.join(app.getAppPath(), 'resources', 'core'),
@@ -66,6 +73,21 @@ function findCoreJar() {
     if (jar) return jar;
   }
   return null;
+}
+
+/** Проверка обновлений ядра при запуске: при автообновлении ставим сразу, иначе сообщаем в окно. */
+async function checkCoreUpdate() {
+  try {
+    const result = await updates.checkForUpdate();
+    if (result.available && readSettings().autoUpdateCore) {
+      await updates.installRelease(result.latest, progress => send('install:progress', progress));
+      send('updates:state', Object.assign({}, result, { available: false, current: result.latest.tag, installed: true }));
+      return;
+    }
+    send('updates:state', result);
+  } catch (error) {
+    send('updates:state', { error: error.message });
+  }
 }
 
 app.whenReady().then(() => {
@@ -95,6 +117,7 @@ ipcMain.handle('state:get', () => ({
   javaList: launcher.candidateJavaDirs(),
   coreJar: findCoreJar(),
   coreInstalled: mods.hasCore(),
+  coreVersion: readSettings().coreVersion || null,
   paths: { root: paths.root, instance: paths.instance, mods: paths.mods },
 }));
 
@@ -122,6 +145,22 @@ ipcMain.handle('game:launch', async () => {
   const settings = readSettings();
   if (settings.closeOnLaunch) setTimeout(() => app.quit(), 8000);
   return { running: true };
+});
+
+ipcMain.handle('updates:check', async () => {
+  try {
+    return await updates.checkForUpdate();
+  } catch (error) {
+    return { error: error.message };
+  }
+});
+
+ipcMain.handle('updates:install', async (event, tag) => {
+  const { releases } = await updates.checkForUpdate();
+  const release = releases.find(item => item.tag === tag);
+  if (!release) throw new Error(`версия ${tag} не найдена в релизах`);
+  await updates.installRelease(release, progress => send('install:progress', progress));
+  return { coreVersion: release.tag };
 });
 
 ipcMain.handle('mods:list', () => mods.list());

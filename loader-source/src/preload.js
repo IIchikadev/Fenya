@@ -17,6 +17,11 @@ contextBridge.exposeInMainWorld('loader', {
     pick: () => ipcRenderer.invoke('dialog:pickMods'),
   },
   pickJava: () => ipcRenderer.invoke('dialog:pickJava'),
+  updates: {
+    check: () => ipcRenderer.invoke('updates:check'),
+    install: tag => ipcRenderer.invoke('updates:install', tag),
+  },
+  onUpdateState: handler => ipcRenderer.on('updates:state', (event, payload) => handler(payload)),
   // путь перетащенного файла в Electron 32+ доступен только через webUtils
   pathForFile: file => {
     try {

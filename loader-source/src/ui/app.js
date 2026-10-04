@@ -26,7 +26,9 @@ async function loadState() {
   el('fullscreen').checked = state.settings.fullscreen;
   el('chip-version').textContent = `${state.version} · fabric ${state.loader}`;
   el('java-chip').textContent = state.java ? `java: ${shortPath(state.java)}` : 'java: не найдена';
-  el('core-chip').textContent = state.coreInstalled ? 'ядро: установлено' : 'ядро: нет';
+  el('core-chip').textContent = state.coreVersion ? `ядро: ${state.coreVersion}` : (state.coreInstalled ? 'ядро: установлено' : 'ядро: нет');
+  el('auto-update').checked = state.settings.autoUpdateCore;
+  el('allow-prerelease').checked = state.settings.allowPrerelease;
   el('java-path').textContent = state.java || 'не найдена — укажите вручную';
   el('paths-info').textContent = `${state.paths.instance}\nмоды: ${state.paths.mods}`;
   setProgress(state.installed ? 100 : 0, state.installed ? 'игра установлена' : 'игра ещё не установлена');
@@ -98,6 +100,80 @@ api.onGameState(payload => {
     el('play-label').textContent = 'Играть';
     setProgress(100, payload.code === 0 ? 'игра закрыта' : `игра закрыта, код ${payload.code}`);
   }
+});
+
+/* ---------- ядро и обновления ---------- */
+let updateInfo = null;
+
+function setCoreButtons(disabled) {
+  ['core-install', 'core-check', 'update-now'].forEach(id => { el(id).disabled = disabled; });
+}
+
+function renderUpdates(info) {
+  updateInfo = info;
+  const select = el('core-versions');
+  const status = el('core-status');
+  const releases = info && !info.error ? info.releases || [] : [];
+  el('update-banner').hidden = !(info && info.available);
+  if (!info || info.error || releases.length === 0) {
+    status.textContent = info && info.error
+      ? `не удалось получить релизы: ${info.error}`
+      : 'в релизах пока нет файла ядра socket-client-*.jar';
+    select.innerHTML = '<option>нет версий</option>';
+    select.disabled = true;
+    el('core-install').disabled = true;
+    return;
+  }
+  select.innerHTML = releases.map(release => `<option value="${escapeHtml(release.tag)}">${escapeHtml(release.tag)}`
+    + `${release.prerelease ? ' · пре-релиз' : ''}${release.tag === info.current ? ' · установлена' : ''}</option>`).join('');
+  select.value = releases.some(release => release.tag === info.current) ? info.current : releases[0].tag;
+  select.disabled = false;
+  el('core-install').disabled = false;
+  status.textContent = (info.current ? `установлена ${info.current}` : 'ядро из релизов ещё не установлено')
+    + (info.latest ? ` · последняя ${info.latest.tag}` : '');
+  if (info.available) {
+    el('update-text').textContent = `Доступно ядро ${info.latest.tag}${info.current ? ` (у вас ${info.current})` : ''}`;
+  }
+}
+
+async function checkUpdates() {
+  el('core-status').textContent = 'проверяем релизы…';
+  renderUpdates(await api.updates.check());
+}
+
+async function installCoreVersion(tag) {
+  setCoreButtons(true);
+  try {
+    await api.updates.install(tag);
+    await loadState();
+    await checkUpdates();
+  } catch (error) {
+    setProgress(0, `ошибка: ${error.message}`);
+  }
+  setCoreButtons(false);
+}
+
+el('core-install').addEventListener('click', () => {
+  const tag = el('core-versions').value;
+  // выбор не последней версии — это закрепление: автообновление его бы перезаписало
+  if (updateInfo && updateInfo.latest && tag !== updateInfo.latest.tag) {
+    el('auto-update').checked = false;
+    api.saveSettings({ autoUpdateCore: false });
+  }
+  installCoreVersion(tag);
+});
+el('update-now').addEventListener('click', () => {
+  if (updateInfo && updateInfo.latest) installCoreVersion(updateInfo.latest.tag);
+});
+el('core-check').addEventListener('click', checkUpdates);
+el('auto-update').addEventListener('change', event => api.saveSettings({ autoUpdateCore: event.target.checked }));
+el('allow-prerelease').addEventListener('change', async event => {
+  await api.saveSettings({ allowPrerelease: event.target.checked });
+  checkUpdates();
+});
+api.onUpdateState(info => {
+  renderUpdates(info);
+  if (info && info.installed) loadState();
 });
 
 /* ---------- моды ---------- */

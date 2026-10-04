@@ -57,6 +57,10 @@ const defaultSettings = {
   javaPath: '',
   closeOnLaunch: false,
   fullscreen: false,
+  autoUpdateCore: true,
+  allowPrerelease: false,
+  coreVersion: '',
+  coreAsset: '',
 };
 
 function readSettings() {

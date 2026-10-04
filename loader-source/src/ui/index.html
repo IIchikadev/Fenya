@@ -63,6 +63,11 @@
         <div class="progress-meta mono"><span id="progress-text">готов к запуску</span><span id="progress-percent">0%</span></div>
       </div>
 
+      <div class="update-banner" id="update-banner" hidden>
+        <span id="update-text">Доступна новая версия ядра</span>
+        <button class="btn btn-g" id="update-now">Обновить</button>
+      </div>
+
       <details class="console">
         <summary class="mono">Лог запуска</summary>
         <pre id="log" class="mono"></pre>
@@ -93,6 +98,17 @@
         <h3>Java</h3>
         <p class="mono small" id="java-path">—</p>
         <div class="row"><button class="btn btn-g" id="pick-java">Выбрать javaw.exe</button></div>
+      </div>
+      <div class="card">
+        <h3>Ядро клиента</h3>
+        <p class="mono small" id="core-status">проверяем релизы…</p>
+        <select class="select mono" id="core-versions" disabled><option>загрузка…</option></select>
+        <div class="row">
+          <button class="btn btn-g" id="core-install" disabled>Установить версию</button>
+          <button class="btn btn-g" id="core-check">Проверить обновления</button>
+        </div>
+        <label class="switch"><input type="checkbox" id="auto-update" /><span></span>Обновлять ядро автоматически</label>
+        <label class="switch"><input type="checkbox" id="allow-prerelease" /><span></span>Предварительные версии</label>
       </div>
       <div class="card">
         <h3>Поведение</h3>
