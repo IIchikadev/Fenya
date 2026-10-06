@@ -1,0 +1,156 @@
+{
+  "vertex": "socket:core/fullscreen",
+  "fragment": "socket:core/camera_motion_blur",
+  "samplers": [
+    {
+      "name": "Sampler0"
+    },
+    {
+      "name": "Sampler1"
+    }
+  ],
+  "uniforms": [
+    {
+      "name": "MvInverse",
+      "type": "matrix4x4",
+      "count": 16,
+      "values": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "ProjInverse",
+      "type": "matrix4x4",
+      "count": 16,
+      "values": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "PrevModelView",
+      "type": "matrix4x4",
+      "count": 16,
+      "values": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "PrevProjection",
+      "type": "matrix4x4",
+      "count": 16,
+      "values": [
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0,
+        1
+      ]
+    },
+    {
+      "name": "CameraDelta",
+      "type": "float",
+      "count": 3,
+      "values": [
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "Strength",
+      "type": "float",
+      "count": 1,
+      "values": [
+        1
+      ]
+    },
+    {
+      "name": "Samples",
+      "type": "int",
+      "count": 1,
+      "values": [
+        32
+      ]
+    },
+    {
+      "name": "Centered",
+      "type": "int",
+      "count": 1,
+      "values": [
+        0
+      ]
+    },
+    {
+      "name": "UseDepth",
+      "type": "int",
+      "count": 1,
+      "values": [
+        1
+      ]
+    },
+    {
+      "name": "ProtectHand",
+      "type": "int",
+      "count": 1,
+      "values": [
+        0
+      ]
+    }
+  ]
+}

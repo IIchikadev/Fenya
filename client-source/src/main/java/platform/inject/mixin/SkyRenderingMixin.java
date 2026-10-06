@@ -10,6 +10,9 @@ public class SkyRenderingMixin {
     @Inject(method = "renderSky", at = @At("HEAD"), cancellable = true)
     private void socketSky(float red, float green, float blue, CallbackInfo ci) {
         var sky = Socket.getInstance().getProcessors().modules().skyShader();
-        if (sky.m()) { sky.render(red, green, blue); ci.cancel(); }
+        if (sky.m() && !socket.render.IrisBridge.active()
+                && !Socket.getInstance().getProcessors().modules().optimization().suppressEffects()) {
+            sky.render(red, green, blue); ci.cancel();
+        }
     }
 }

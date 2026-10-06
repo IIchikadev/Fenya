@@ -93,15 +93,14 @@ public class ConfigPanel {
         this.height = panelHeight;
         Draw2DProcessor draw = Socket.getInstance().getProcessors().draw2D();
         ThemeProcessor theme = Socket.getInstance().getProcessors().themes();
-        int background = ColorUtil.combineColorWithAlpha(ColorUtil.lerpColor(theme.a(ThemeInfo.BACKGROUND_GUI).toIntColor(),
-                theme.a(ThemeInfo.PRIMARY).toIntColor(), theme.a(ThemeInfo.PRIMARY).getAlphaFloat() / 4.0f), 200);
+        int background = ColorUtil.combineColorWithAlpha(theme.a(ThemeInfo.BACKGROUND_GUI).toIntColor(), 200);
         boolean glass = GlassStyle.menu();
         if (glass) {
-            background = GlassStyle.tint(background);
+            background = GlassStyle.menuTint(background);
         }
         context.getMatrices().push();
         context.getMatrices().translate((-(1.0f - fade)) * 12.0f, 0.0f, 0.0f);
-        draw.a(context.getMatrices(), this.x, this.y, WIDTH, this.height, 8.0f, background, 1.0f, background, 16.0f);
+        draw.a(context.getMatrices(), this.x, this.y, WIDTH, this.height, 8.0f, background, glass ? GlassStyle.blurAlpha(1.0f) : 1.0f, background, 16.0f);
         draw.a(context.getMatrices(), this.x, this.y, WIDTH, this.height, 8.0f, 0.5f,
                 theme.a(ThemeInfo.OUTLINE_MEDIUM).toIntColor());
         if (glass) {

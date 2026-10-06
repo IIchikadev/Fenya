@@ -2,6 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "platform.inject",
+  "plugin": "platform.inject.SocketMixinPlugin",
   "compatibilityLevel": "JAVA_21",
   "priority": 999,
   "mixins": [
@@ -20,6 +21,7 @@
     "mixin.WorldBorderMixin"
   ],
   "client": [
+    "mixin.ChunkAnimatorMixin",
     "accessors.BipedEntityModelAccessor",
     "accessors.BossBarHudAccessor",
     "accessors.ButtonWidgetAccessor",
@@ -97,7 +99,8 @@
     "mixin.WeatherRenderingMixin",
     "mixin.WindowMixin",
     "mixin.WorldMixin",
-    "mixin.WorldRendererMixin"
+    "mixin.WorldRendererMixin",
+    "mixin.MixinCosmeticRenderer"
   ],
   "injectors": {
     "defaultRequire": 1

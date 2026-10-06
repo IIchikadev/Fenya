@@ -10,6 +10,9 @@ const mods = require('./mods');
 /** Полная установка инстанса: ванилла → Fabric → нативы → ассеты → Fabric API → ядро клиента. */
 async function install(onStage, coreJarPath) {
   const stage = (text, percent) => onStage && onStage({ text, percent });
+  if (!coreJarPath || !fs.existsSync(coreJarPath)) throw new Error('Missing Socket core');
+  await require('./runtime').ensureJava(onStage);
+  require('./bundle').installDependencies();
   ensureDir(paths.instance);
   ensureDir(paths.mods);
 
@@ -36,6 +39,9 @@ async function install(onStage, coreJarPath) {
   stage('Ставлю Fabric API', 92);
   await fabric.installFabricApi();
 
+  if (require('./bundle').available()) require('./shaders').configure();
+  else await require('./shaders').install(onStage);
+
   if (coreJarPath && fs.existsSync(coreJarPath)) {
     stage('Ставлю ядро Socket Client', 96);
     mods.installCore(coreJarPath);
@@ -56,7 +62,12 @@ function writeMarker() {
 }
 
 function isInstalled() {
-  return fs.existsSync(markerPath()) && fs.existsSync(paths.clientJar());
+  try {
+    if (!fs.existsSync(markerPath()) || !fs.existsSync(paths.clientJar())) return false;
+    const version = JSON.parse(fs.readFileSync(paths.versionJson(), 'utf8'));
+    const profile = JSON.parse(fs.readFileSync(paths.fabricJson(), 'utf8'));
+    return [...vanilla.collectVanillaTasks(version), ...fabric.collectFabricTasks(profile)].every(task => fs.existsSync(task.target) && fs.statSync(task.target).size > 0) && fs.existsSync(path.join(paths.assets, 'indexes', `${version.assetIndex.id}.json`)) && fs.existsSync(path.join(paths.natives, 'lwjgl.dll'));
+  } catch { return false; }
 }
 
 module.exports = { install, isInstalled };

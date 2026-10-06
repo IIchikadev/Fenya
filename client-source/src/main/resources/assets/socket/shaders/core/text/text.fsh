@@ -29,8 +29,9 @@ void main() {
     vec4 color = vec4(FragColor.rgb, FragColor.a * alpha);
 
     if (uOutline) {
-        color = mix(uOutlineColor, FragColor, alpha);
-        color.a *= smoothstep(-uSmoothness, uSmoothness, (dist + uOutlineThickness) * pixels);
+        color.rgb = mix(uOutlineColor.rgb, FragColor.rgb, alpha);
+        color.a = FragColor.a * mix(uOutlineColor.a, 1.0, alpha)
+                * smoothstep(-uSmoothness, uSmoothness, (dist + uOutlineThickness) * pixels);
     }
 
     if (uFadeEnabled != 0) {

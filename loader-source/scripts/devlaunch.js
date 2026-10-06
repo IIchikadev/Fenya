@@ -2,7 +2,7 @@
 // Разовый запуск клиента сразу в мир — чтобы посмотреть HUD без ручной навигации по меню.
 const path = require('path');
 const { spawn } = require('child_process');
-const root = 'C:\\Users\\fedor\\OneDrive\\Документы\\socket dev\\socket-loader\\src\\core';
+const root = require('path').resolve(__dirname, '../src/core');
 const { paths, ensureDir, MC_VERSION, readSettings } = require(path.join(root, 'paths'));
 const vanilla = require(path.join(root, 'vanilla'));
 const fabric = require(path.join(root, 'fabric'));

@@ -51,6 +51,7 @@ public class ModuleProcessor extends ConfigProcessor<Module> {
     private final FastPlace fastPlace = new FastPlace();
     public FastPlace fastPlace() { return fastPlace; }
     private final Glass glass = new Glass();
+    private final WorldShaders worldShaders = new WorldShaders();
     public Glass glass() { return glass; }
     private final ContainerPreview containerPreview = new ContainerPreview();
     public ContainerPreview containerPreview() { return containerPreview; }
@@ -73,7 +74,12 @@ public class ModuleProcessor extends ConfigProcessor<Module> {
         private final FullBright aO = new FullBright();
                         private final RadialMenu bj = new RadialMenu();
                         private final MotionBlur bp = new MotionBlur();
+    private final socket.cosmetic.local.CosmeticModule localCosmetics = new socket.cosmetic.local.CosmeticModule();
+    public socket.cosmetic.local.CosmeticModule localCosmetics(){return localCosmetics;}
+    private final TargetESP targetEsp = new TargetESP();
+    public TargetESP targetEsp(){return targetEsp;}
     private final Optimization bq = new Optimization();
+    public Optimization optimization() { return bq; }
     private final Adornments br = new Adornments();
     private final EnchantGlow bs = new EnchantGlow();
     private final Cape bt = new Cape();
@@ -103,7 +109,7 @@ public class ModuleProcessor extends ConfigProcessor<Module> {
 
     public void setup() {
         this.bd = new Interface();
-        a(auctionHelper, autoResell, saturation, bloom, skyShader, customFog, fakePlayer, chunkAnimator, fastPlace, glass, containerPreview, inventoryProfiles);
+        a(targetEsp, localCosmetics, auctionHelper, autoResell, saturation, bloom, skyShader, customFog, fakePlayer, chunkAnimator, fastPlace, glass, worldShaders, containerPreview, inventoryProfiles);
         a(this.J, this.aE, this.ao, this.Q, this.ag, this.r, this.as, this.R, this.ay, this.L, this.o, this.ai, this.bd, this.at, this.aB, this.aO, this.bj, this.bp, this.bq, this.br, this.bs, this.bt, this.cb, this.cc, this.cd, this.ce, this.cf, this.cg, this.ch);
         super.setup();
     }
@@ -124,7 +130,8 @@ public class ModuleProcessor extends ConfigProcessor<Module> {
             if (jSONObjectJ == null) {
                 throw new NullPointerException();
             }
-            final String strL = jSONObjectJ.l("name");
+            final String savedName = jSONObjectJ.l("name");
+            final String strL = "Miniature Shader".equalsIgnoreCase(savedName) ? "Shaders" : savedName;
             List<Module> listE = e();
             if (listE == null) {
                 throw new NullPointerException();

@@ -21,7 +21,7 @@ public class AutoSwap extends Module {
     public AutoSwap() {
         BindSetting f = new BindSetting("Кнопка перемещения", 86, 0).a(() -> {
             Socket.getInstance().getProcessors().handlers().getInventoryHandler()
-                    .moveItem(InventoryUtil.c(mc.player.getOffHandStack().getItem() == a(this.c) ? a(this.d) : a(this.c)), 45, 1);
+                    .moveItem(InventoryUtil.c(mc.player.getOffHandStack().getItem() == a(this.c) ? a(this.d) : a(this.c)), 45, 4);
         }).b(() -> {
             if (mc.currentScreen instanceof SwapScreen) {
                 mc.setScreen(null);

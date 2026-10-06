@@ -40,6 +40,7 @@ function walk(directory, visit) {
 }
 
 function build() {
+  if (path.resolve(output) !== path.resolve(root, 'obf')) throw new Error('Unsafe output path');
   fs.rmSync(output, { recursive: true, force: true });
   let obfuscated = 0;
   let copied = 0;
@@ -68,11 +69,12 @@ function pack() {
   manifest.main = 'obf/main.js';
   manifest.build.files = ['obf/**/*'];
   manifest.build.asar = true;
+  if (process.env.SOCKET_ELECTRON_DIST) manifest.build.electronDist = path.resolve(process.env.SOCKET_ELECTRON_DIST);
   fs.writeFileSync(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, 'utf8');
   try {
     // путь проекта содержит пробелы и кириллицу, поэтому запускаем через npx без ручной сборки командной строки
-    const npx = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-    execFileSync(npx, ['--yes', 'electron-builder', '--win', '--x64'], { cwd: root, stdio: 'inherit', shell: false });
+
+    execFileSync(process.execPath, [path.join(root, 'node_modules', 'electron-builder', 'cli.js'), '--win', '--x64'], { cwd: root, stdio: 'inherit', shell: false });
   } finally {
     fs.writeFileSync(manifestPath, original, 'utf8');
   }

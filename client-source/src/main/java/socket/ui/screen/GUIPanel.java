@@ -149,12 +149,12 @@ public class GUIPanel {
         matrices.translate(this.a.x + (this.a.z / 2.0f), this.a.y + (this.a.w / 2.0f) + ((1.0f - EasingList.p.ease(this.c.c())) * 14.0f), 0.0f);
         matrices.scale(scale, scale, 1.0f);
         matrices.translate(-(this.a.x + (this.a.z / 2.0f)), -(this.a.y + (this.a.w / 2.0f)), 0.0f);
-        int background = ColorUtil.combineColorWithAlpha(ColorUtil.lerpColor(theme.a(ThemeInfo.BACKGROUND_GUI).toIntColor(), theme.a(ThemeInfo.PRIMARY).toIntColor(), theme.a(ThemeInfo.PRIMARY).getAlphaFloat() / 4.0f), InterfaceC0020Opcode.aN);
+        int background = ColorUtil.combineColorWithAlpha(theme.a(ThemeInfo.BACKGROUND_GUI).toIntColor(), InterfaceC0020Opcode.aN);
         boolean glass = GlassStyle.menu();
         if (glass) {
-            background = GlassStyle.tint(background);
+            background = GlassStyle.menuTint(background);
         }
-        draw.a(matrices, this.a.x, this.a.y, this.a.z, this.a.w, 8.0f, background, 1.0f, background, 16.0f);
+        draw.a(matrices, this.a.x, this.a.y, this.a.z, this.a.w, 8.0f, background, glass ? GlassStyle.blurAlpha(1.0f) : 1.0f, background, 16.0f);
         draw.a(matrices, this.a.x, this.a.y, this.a.z, this.a.w, 8.0f, 0.5f, theme.a(ThemeInfo.OUTLINE_MEDIUM).toIntColor());
         if (glass) {
             GlassStyle.sheen(draw, matrices, this.a.x, this.a.y, this.a.z, this.a.w, 8.0f, 1.0f);
@@ -204,7 +204,7 @@ public class GUIPanel {
             module.i().a(module == this.f);
             float total = b(module);
             if (y2 + total > y && y2 < bottom) {
-                draw.a(matrices, this.a.x + 6.0f, y2, this.a.z - 12.0f, total, 4.0f, ColorUtil.applyAlphaToColor(theme.a(ThemeInfo.PRIMARY).toIntColor(), 0.039215688f * activation * fade));
+                draw.a(matrices, this.a.x + 6.0f, y2, this.a.z - 12.0f, total, 4.0f, ColorUtil.applyAlphaToColor(theme.a(ThemeInfo.PRIMARY).toIntColor(), 0.10f * activation * fade));
                 draw.a(matrices, this.a.x + 6.0f, y2, this.a.z - 12.0f, total, 4.0f, ColorUtil.applyAlphaToColor(ColorUtil.convertToARGB(255, 255, 255, 255), 0.023529412f * module.i().c() * fade));
                 draw.a(matrices, this.a.x + 6.0f, y2, this.a.z - 12.0f, total, 4.0f, 0.5f, ColorUtil.applyAlphaToColor(theme.a(ThemeInfo.OUTLINE_SMALL).toIntColor(), theme.a(ThemeInfo.OUTLINE_SMALL).getAlphaFloat() * activation * fade));
                 Fonts.c.a(matrices, module.j(), this.a.x + 6.0f + 4.0f, (center - (Fonts.c.a(7.25f) / 2.0f)) - 0.5f, 7.25f, ColorUtil.applyAlphaToColor(theme.a(ThemeInfo.TEXT).toIntColor(), fade));
@@ -228,7 +228,7 @@ public class GUIPanel {
                 if (activation > 0.0f) {
                     float toggleX = (((this.a.x + this.a.z) - 6.0f) - 4.0f) - 14.0f;
                     float toggleY = center - 4.25f;
-                    draw.a(matrices, toggleX, toggleY, 14.0f, 8.5f, 3.25f, ColorUtil.applyAlphaToColor(theme.a(ThemeInfo.PRIMARY).toIntColor(), 0.49019608f * activation * fade));
+                    draw.a(matrices, toggleX, toggleY, 14.0f, 8.5f, 3.25f, ColorUtil.applyAlphaToColor(theme.a(ThemeInfo.PRIMARY).toIntColor(), 0.72f * activation * fade));
                     draw.a(matrices, toggleX, toggleY, 14.0f, 8.5f, 3.25f, 0.3f, ColorUtil.applyAlphaToColor(theme.a(ThemeInfo.OUTLINE_SMALL).toIntColor(), theme.a(ThemeInfo.OUTLINE_SMALL).getAlphaFloat() * activation * fade));
                     draw.a(matrices, toggleX + 1.5f + (5.5f * activation), toggleY + 1.5f, 5.5f, 5.5f, 1.75f, ColorUtil.applyAlphaToColor(ColorUtil.lerpColor(ColorUtil.convertToARGB(InterfaceC0020Opcode.ap, InterfaceC0020Opcode.ap, InterfaceC0020Opcode.bk, 255), ColorUtil.convertToARGB(255, 255, 255, 255), activation), activation * fade));
                 }

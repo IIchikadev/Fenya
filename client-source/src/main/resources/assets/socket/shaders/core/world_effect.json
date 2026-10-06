@@ -26,14 +26,6 @@
       "count": 1
     },
     {
-      "name": "HistoryMix",
-      "type": "float",
-      "values": [
-        0.0
-      ],
-      "count": 1
-    },
-    {
       "name": "Texel",
       "type": "float",
       "values": [
@@ -46,9 +38,6 @@
   "samplers": [
     {
       "name": "Sampler0"
-    },
-    {
-      "name": "Sampler1"
     }
   ],
   "vertex": "socket:core/fullscreen"

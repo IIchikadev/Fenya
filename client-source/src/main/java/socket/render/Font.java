@@ -1,6 +1,7 @@
 package socket.render;
 
 import socket.ui.shader.GradientUtil;
+import socket.ui.GlassStyle;
 import socket.util.ChatUtil;
 import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.gl.Defines;
@@ -56,6 +57,11 @@ public class Font {
     }
 
     private void a(float outlineThickness, float thickness, float smoothness, int outlineColor, float fadeStart, float fadeEnd) {
+        if (GlassStyle.menuText()) {
+            outlineThickness = Math.max(outlineThickness, 0.10f);
+            outlineColor = 0xF5080A0D;
+            thickness += 0.025f;
+        }
         RenderSystem.enableBlend();
         RenderSystem.defaultBlendFunc();
         RenderSystem.disableCull();
@@ -239,7 +245,7 @@ public class Font {
                 if (offset > 1.0f) {
                     currentColor = ColorUtil.makeGradient(color, colorSecond, x2 - x, totalWidth, time, offset);
                 }
-                x = x2 + glyph.a(matrix, consumer, size, x2, y, z, currentColor) + thickness + spacing;
+                x = x2 + drawGlyph(matrix, consumer, glyph, size, x2, y, z, currentColor) + thickness + spacing;
                 previousChar = codePoint;
             }
         }
@@ -260,7 +266,7 @@ public class Font {
                 if (glyph != null) {
                     hasGlyphs = true;
                     float x2 = x + a(previousChar, codePoint, size);
-                    float advance = glyph.a(matrix, consumer, size, x2, y, z, ColorUtil.applyAlphaToColor(color, alpha));
+                    float advance = drawGlyph(matrix, consumer, glyph, size, x2, y, z, ColorUtil.applyAlphaToColor(color, alpha));
                     if (i < coloredGlyphs.size() - 1) {
                         advance += thickness + spacing;
                     }
@@ -278,6 +284,14 @@ public class Font {
             return 0.0f;
         }
         return kerning.getOrDefault(Integer.valueOf(currentChar), Float.valueOf(0.0f)).floatValue() * size;
+    }
+
+    private float drawGlyph(Matrix4f matrix, VertexConsumer consumer, MsdfGlyph glyph,
+                            float size, float x, float y, float z, int color) {
+        if (GlassStyle.menuText()) {
+            color = GlassStyle.textColor(color);
+        }
+        return glyph.a(matrix, consumer, size, x, y, z, color);
     }
 
     public float a(float size) {

@@ -332,7 +332,12 @@ public class TextField {
             public void a(Draw2DProcessor draw, MatrixStack matrices, float x, float y, float width, float height, float alpha) {
                 ThemeProcessor theme = Socket.getInstance().getProcessors().themes();
                 int background = ColorUtil.applyAlphaToColor(ColorUtil.lerpColor(theme.a(ThemeInfo.BACKGROUND_GUI).toIntColor(), theme.a(ThemeInfo.PRIMARY).toIntColor(), 0.05f), 0.78431374f * alpha);
-                draw.a(matrices, x, y, width, height, 6.0f, background, alpha, background, 2.0f);
+                boolean glass = socket.ui.GlassStyle.menuText();
+                if (glass) {
+                    background = ColorUtil.applyAlphaToColor(0x111419, 0.55f * alpha);
+                }
+                draw.a(matrices, x, y, width, height, 6.0f, background,
+                        glass ? socket.ui.GlassStyle.blurAlpha(alpha) : alpha, background, 2.0f);
                 draw.a(matrices, x, y, width, height, 6.0f, 0.5f, ColorUtil.applyAlphaToColor(theme.a(ThemeInfo.OUTLINE_MEDIUM).toIntColor(), theme.a(ThemeInfo.OUTLINE_MEDIUM).getAlphaFloat() * alpha));
             }
         },

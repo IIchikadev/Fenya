@@ -27,7 +27,7 @@ public class InventoryHandler extends BaseHandler implements Interface {
         if (!this.b.isEmpty()) {
             a task = this.b.getFirst();
             StopHandler stopHandler = Socket.getInstance().getProcessors().handlers().getStopHandler();
-            if (stopHandler.c() < task.getBypass()) {
+            if (stopHandler.c() <= 0) {
                 int from = normalizeSlot(task.getFromSlot());
                 int to = task.isArmorMove() ? task.getToSlot() : normalizeSlot(task.getToSlot());
                 if (mc.player.playerScreenHandler.getSlot(from).getStack()

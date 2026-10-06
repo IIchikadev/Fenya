@@ -58,7 +58,8 @@ public final class HudSkin {
             return;
         }
         int background = backdrop(animation);
-        event.getDraw2DProcessor().b(event.h(), x, y, width, height, CORNER, background, animation);
+        event.getDraw2DProcessor().b(event.h(), x, y, width, height, CORNER, background,
+                GlassStyle.hud() ? GlassStyle.blurAlpha(animation) : animation);
         // блик по верхней кромке — плашка перестаёт выглядеть плоской заливкой
         event.getDraw2DProcessor().a(event.h(), x + 1.0f, y + 0.5f, width - 2.0f, 0.75f, 0.375f,
                 ColorUtil.applyAlphaToColor(ColorUtil.a(255, 255, 255), 0.16f * animation));
@@ -76,7 +77,8 @@ public final class HudSkin {
         if (animation <= 0.0f) {
             return;
         }
-        event.getDraw2DProcessor().b(event.h(), x, y, width, height, CORNER - 1.0f, backdrop(animation), animation);
+        event.getDraw2DProcessor().b(event.h(), x, y, width, height, CORNER - 1.0f, backdrop(animation),
+                GlassStyle.hud() ? GlassStyle.blurAlpha(animation) : animation);
         event.getDraw2DProcessor().a(event.h(), x, y, width, height, inner(), 0.5f,
                 ColorUtil.applyAlphaToColor(ColorUtil.a(255, 255, 255), 0.06f * animation));
         if (GlassStyle.hud()) {

@@ -6,7 +6,7 @@ const { getJson, download } = require('./download');
 const mods = require('./mods');
 
 /** Репозиторий, в релизах которого лежит собранное ядро socket-client-*.jar. */
-const REPO = 'IIchikadev/Fenya';
+const REPO = 'IIchikadev/Socket';
 const CORE_ASSET = /^socket-client-.*\.jar$/i;
 
 function coresDir() {

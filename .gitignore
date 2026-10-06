@@ -12,3 +12,11 @@ loader-source/dist/
 !client-source/gradle/wrapper/gradle-wrapper.jar
 # Служебное
 .zwork/
+
+# Local packaging, third-party downloads and isolated game profiles
+loader-source/obf/
+loader-source/build-runtime/
+loader-source/test-output/
+loader-source/bundle/
+imports/
+menu-character-preview.png

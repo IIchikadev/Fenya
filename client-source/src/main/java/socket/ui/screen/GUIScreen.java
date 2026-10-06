@@ -25,6 +25,7 @@ import java.util.function.Function;
 import java.util.function.ToDoubleFunction;
 
 public class GUIScreen extends Screen {
+    private static final net.minecraft.util.Identifier MENU_CHARACTER = net.minecraft.util.Identifier.of("socket", "textures/gui/menu_character.png");
     private final TextField a;
     private final AnimationUtil b;
     private final List<GUIPanel> c;
@@ -32,6 +33,27 @@ public class GUIScreen extends Screen {
     private String d;
     private String e = null;
     private int f = -1;
+    private boolean menuSoundOpened;
+    private long portraitOpenedNanos;
+
+    @Override
+    protected void init() {
+        super.init();
+        if (!this.menuSoundOpened) {
+            this.menuSoundOpened = true;
+            this.portraitOpenedNanos = System.nanoTime();
+            Socket.getInstance().getProcessors().modules().sounds().menu(true);
+        }
+    }
+
+    @Override
+    public void removed() {
+        super.removed();
+        if (this.menuSoundOpened) {
+            this.menuSoundOpened = false;
+            Socket.getInstance().getProcessors().modules().sounds().menu(false);
+        }
+    }
 
     public GUIScreen(Text title) {
         super(title);
@@ -71,10 +93,28 @@ public class GUIScreen extends Screen {
 
     public void render(DrawContext context, int mouseX, int mouseY, float delta) {
         context.draw();
+        socket.ui.GlassStyle.setMenuText(socket.ui.GlassStyle.menu());
         try (RenderState state = new RenderState(false)) {
             renderPanels(context, mouseX, mouseY, delta);
             context.draw();
+        } finally {
+            socket.ui.GlassStyle.setMenuText(false);
         }
+    }
+
+    private void renderCharacter(DrawContext context) {
+        float fade = EasingList.p.ease(Math.min(1.0f, (System.nanoTime() - this.portraitOpenedNanos) / 300_000_000.0f));
+        if (fade <= 0.01f) return;
+        float screenWidth = Interface.mc.getWindow().getScaledWidth();
+        float screenHeight = Interface.mc.getWindow().getScaledHeight();
+        float portraitHeight = Math.min(screenHeight * 0.42f, screenWidth * 0.18f / 0.72f);
+        float portraitWidth = portraitHeight * 0.72f;
+        float margin = 6.0f;
+        float x = screenWidth - portraitWidth - margin + (1.0f - fade) * 12.0f;
+        float y = screenHeight - portraitHeight;
+        Socket.getInstance().getProcessors().draw2D().a(context.getMatrices(), MENU_CHARACTER,
+                x, y, portraitWidth, portraitHeight, 0.0f,
+                ColorUtil.applyAlphaToColor(0xFFFFFF, fade));
     }
 
     private void renderPanels(DrawContext context, int mouseX, int mouseY, float delta) {
@@ -146,6 +186,7 @@ public class GUIScreen extends Screen {
         a(context, f6, f7, (int) dA, (int) dA2, delta);
         class_4587VarMethod_51448.pop();
         a(context.getMatrices(), f6, top, delta);
+        renderCharacter(context);
         ScaleUtil.a(context);
     }
 

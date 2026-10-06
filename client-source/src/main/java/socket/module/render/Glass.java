@@ -12,7 +12,7 @@ import socket.setting.SliderSetting;
  */
 @ModuleRegister(name = "Glass", description = "Стеклянный интерфейс: прозрачные размытые панели с бликом", category = Category.Render)
 public class Glass extends Module {
-    private final SliderSetting density = new SliderSetting("Плотность стекла, %", 35.0f, 5.0f, 100.0f, 5.0f);
+    private final SliderSetting density = new SliderSetting("Плотность стекла, %", 15.0f, 0.0f, 100.0f, 5.0f);
     private final BooleanSetting highlight = new BooleanSetting("Блик и светлая рамка", true);
     private final BooleanSetting hud = new BooleanSetting("HUD", true);
     private final BooleanSetting menu = new BooleanSetting("Меню", true);

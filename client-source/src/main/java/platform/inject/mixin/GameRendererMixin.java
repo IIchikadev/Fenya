@@ -43,8 +43,10 @@ public class GameRendererMixin implements Interface {
     }
 
     @Inject(method = "renderWorld", at = @At(value = "FIELD", target = "Lnet/minecraft/client/render/GameRenderer;renderHand:Z", ordinal = 0))
-    private void socketWorldEffects(RenderTickCounter counter, CallbackInfo ci) {
+    private void socketWorldEffects(RenderTickCounter counter, CallbackInfo ci, @Local(ordinal = 0) Matrix4f projection, @Local(ordinal = 2) Matrix4f view) {
+        socket.render.CameraMotionBlur.capture(view, projection);
         socket.render.WorldEffects.render(true);
+        socket.render.CameraMotionBlur.render();
     }
 
     @Inject(method = "renderWorld", at = @At("RETURN"))

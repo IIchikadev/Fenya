@@ -1,7 +1,7 @@
 /* Кнопки скачивания берут файл из последнего релиза на GitHub.
    Если API недоступно или в релизе нет установщика — ведём на страницу релизов. */
 (() => {
-  const REPO = "IIchikadev/Fenya";
+  const REPO = "IIchikadev/Socket";
   const FALLBACK = `https://github.com/${REPO}/releases/latest`;
   const buttons = [...document.querySelectorAll("[data-download]")];
   const labels = [...document.querySelectorAll("[data-release]")];
@@ -10,6 +10,7 @@
   if (!buttons.length && !labels.length) return;
 
   const pick = (assets) =>
+    assets.find((a) => /^socket[ ._-]*loader\.exe$/i.test(a.name)) ||
     assets.find((a) => /setup.*\.exe$/i.test(a.name)) ||
     assets.find((a) => /portable.*\.exe$/i.test(a.name)) ||
     assets.find((a) => /\.exe$/i.test(a.name));

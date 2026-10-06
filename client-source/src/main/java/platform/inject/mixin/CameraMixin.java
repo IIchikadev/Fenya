@@ -16,6 +16,9 @@ import net.minecraft.world.BlockView;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import net.minecraft.world.RaycastContext;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import platform.inject.accessors.CameraAccessor;
@@ -50,16 +53,32 @@ public abstract class CameraMixin {
         }
     }
 
-    @Inject(method = {"clipToSpace"}, at = {@At("HEAD")}, cancellable = true)
-    private void onClipToSpace(float desiredCameraDistance, CallbackInfoReturnable<Float> info) {
+    /**
+     * Только масштабирует желаемую дистанцию камеры (анимация отъезда).
+     * Ванильная проверка столкновений со стенами всегда выполняется,
+     * поэтому в третьем лице и во Freelook камера не проходит сквозь блоки.
+     */
+    @ModifyVariable(method = {"clipToSpace"}, at = @At("HEAD"), argsOnly = true)
+    private float onClipToSpace(float desiredCameraDistance) {
         Animations animations = Socket.getInstance().getProcessors().modules().animations();
-        RemovalsEvent event = new RemovalsEvent(RemovalsEvent.type.CLIP);
-        EventManager.a(event);
         if (animations.m()) {
             desiredCameraDistance *= animations.u().c();
         }
-        if (event.a() || animations.m()) {
-            info.setReturnValue(Float.valueOf(desiredCameraDistance));
-        }
+        return desiredCameraDistance;
+    }
+
+    @ModifyArg(method = "clipToSpace", at = @At(value = "INVOKE",
+            target = "Lnet/minecraft/world/RaycastContext;<init>(Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/util/math/Vec3d;Lnet/minecraft/world/RaycastContext$ShapeType;Lnet/minecraft/world/RaycastContext$FluidHandling;Lnet/minecraft/entity/Entity;)V"), index = 2)
+    private RaycastContext.ShapeType freelookCollisionShape(RaycastContext.ShapeType original) {
+        return Socket.getInstance().getProcessors().modules().freelook().q()
+                ? RaycastContext.ShapeType.COLLIDER : original;
+    }
+
+    @ModifyReturnValue(method = "clipToSpace", at = @At("RETURN"))
+    private float freelookWallClearance(float clippedDistance) {
+        // Keep the near clipping plane on the player's side of the wall. The
+        // vanilla corner rays stop at the surface, which permits edge peeking.
+        return Socket.getInstance().getProcessors().modules().freelook().q()
+                ? Math.max(0, clippedDistance - 0.2f) : clippedDistance;
     }
 }

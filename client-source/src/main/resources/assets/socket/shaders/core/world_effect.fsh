@@ -1,10 +1,8 @@
 #version 150
 uniform sampler2D Sampler0;
-uniform sampler2D Sampler1;
 uniform float Saturation;
 uniform float Threshold;
 uniform float Glow;
-uniform float HistoryMix;
 uniform vec2 Texel;
 in vec2 uv;
 out vec4 fragColor;
@@ -23,6 +21,5 @@ void main() {
     }
     float luma = dot(color, vec3(0.2126, 0.7152, 0.0722));
     color = mix(vec3(luma), color, Saturation);
-    if (HistoryMix > 0.0) color = mix(color, texture(Sampler1, uv).rgb, HistoryMix);
     fragColor = vec4(color, 1.0);
 }

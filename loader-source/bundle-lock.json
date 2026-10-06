@@ -1,0 +1,34 @@
+{
+  "dependencies": [
+    {
+      "file": "mods/fabric-api-0.119.4+1.21.4.jar",
+      "sha256": "d183bacb845167f09264c2f90322b7ecffe8826debda6f60e597889264bef4af",
+      "sha512": "16b679f6a42549ca3b6bc147de710b2c8ba2d5e4661ed88df22782c05a4a5f6c1163d7b13867687ed91acde0fdfe5a5037d05662431c946865b58396284e7ee7"
+    },
+    {
+      "file": "mods/fastitems-fabric-1.1.0-fabric-1.21.4.jar",
+      "sha256": "2aef47aad47f0c4ad59926ba9902a6ce6305a1d0c1d7c8cad03e19b83a7d7d70",
+      "sha512": "512685272096aae7cf3ecdec1080f30626d6ac1d03cfde0ea8250a5a1efccf77ed68447f59ea934c35e573e6bbe1da7f0395cf92ac4a2e0157622bf30f56f96a"
+    },
+    {
+      "file": "mods/iris-fabric-1.8.8+mc1.21.4.jar",
+      "sha256": "70571b23d4de17ae380515fb4c9dadd82d96f7ec1b573553858a07bb80445da9",
+      "sha512": "5296c4b0c0be6d5259b985577154c02e6534818465205e6995b5229b26414b423d333199152693118a897f31312e4de051abe28df7d0dd0950c8b649e54a50a0"
+    },
+    {
+      "file": "mods/lithium-fabric-0.15.3-mc1.21.4.jar",
+      "sha256": "153891e8d6988fedffa5098851a725a137c3e5ca04a89a8df409feb313623eb4",
+      "sha512": "b8b541c0e968571c8972872b342e34b92573bc9210d455dc1349589f30a67a90d930dbfd99b176ab9b110350ceb53e11118378dc13a35e83a9090826627bdac0"
+    },
+    {
+      "file": "mods/sodium-fabric-0.6.13+mc1.21.4.jar",
+      "sha256": "92b79623fc00f0f948005a0ae416cb42a51646f2423b4036e27e867e4001a47e",
+      "sha512": "2c72ca2ddfd27e29ff6c24fccdf6f3d80857bd1014c707017f96cb4a424f94918e53ba21d85f22e3c9171803f8d2c12c99ae857d38d8e85546cc65960b95a2f1"
+    },
+    {
+      "file": "shaderpacks/MakeUp-UltraFast-9.5g.zip",
+      "sha256": "0036da17e0c7158e1c669593e6322d53fce3f5a42fb5124b935e9e21a5719db8",
+      "sha512": "90a2f75eb073eaae5fe65f2ea5f8d656c122760c07ff75306728df4b162c42f88be531f026d174e035fea153f0ac5e227e8885d8b199335d3beadb6a58f79239"
+    }
+  ]
+}

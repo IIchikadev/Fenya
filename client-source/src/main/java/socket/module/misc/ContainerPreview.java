@@ -95,7 +95,7 @@ public class ContainerPreview extends Module {
         if (glass) {
             background = GlassStyle.tint(background);
         }
-        draw.b(matrices, x, y, width, height, CORNER, background, 1.0f);
+        draw.b(matrices, x, y, width, height, CORNER, background, glass ? GlassStyle.blurAlpha(1.0f) : 1.0f);
         draw.a(matrices, x, y, width, height, CORNER, 0.5f, ColorUtil.applyAlphaToColor(accent, 0.7f));
         if (glass) {
             GlassStyle.sheen(draw, matrices, x, y, width, height, CORNER, 1.0f);

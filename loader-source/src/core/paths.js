@@ -53,11 +53,11 @@ function ensureDir(target) {
 
 const defaultSettings = {
   nickname: 'Player',
-  memory: 4096,
+  memory: os.totalmem() < 6 * 1024 ** 3 ? 2048 : 4096,
   javaPath: '',
   closeOnLaunch: false,
   fullscreen: false,
-  autoUpdateCore: true,
+  autoUpdateCore: false,
   allowPrerelease: false,
   coreVersion: '',
   coreAsset: '',

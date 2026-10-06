@@ -25,11 +25,11 @@ async function loadState() {
   el('close-on-launch').checked = state.settings.closeOnLaunch;
   el('fullscreen').checked = state.settings.fullscreen;
   el('chip-version').textContent = `${state.version} · fabric ${state.loader}`;
-  el('java-chip').textContent = state.java ? `java: ${shortPath(state.java)}` : 'java: не найдена';
+  el('java-chip').textContent = state.java ? `java: ${shortPath(state.java)}` : 'java: автоустановка';
   el('core-chip').textContent = state.coreVersion ? `ядро: ${state.coreVersion}` : (state.coreInstalled ? 'ядро: установлено' : 'ядро: нет');
   el('auto-update').checked = state.settings.autoUpdateCore;
   el('allow-prerelease').checked = state.settings.allowPrerelease;
-  el('java-path').textContent = state.java || 'не найдена — укажите вручную';
+  el('java-path').textContent = state.java || 'установится автоматически';
   el('paths-info').textContent = `${state.paths.instance}\nмоды: ${state.paths.mods}`;
   setProgress(state.installed ? 100 : 0, state.installed ? 'игра установлена' : 'игра ещё не установлена');
   el('play-label').textContent = state.installed ? 'Играть' : 'Установить и играть';

@@ -10,14 +10,19 @@ npm install
 npm start
 ```
 
-## Сборка установщика
+## Сборка одного переносимого EXE
 
 ```bash
-npm run dist        # electron-builder → NSIS-инсталлятор в dist/
+npm run dist        # dist/Socket loader.exe
 ```
 
-Чтобы в собранный установщик попало ядро клиента, положите `socket-client-*.jar`
-в `resources/core/` при упаковке (или соберите клиент рядом: `../SocketClient/build/libs`).
+Сначала соберите `../client-source` с JDK 21. Комплект создаётся автоматически:
+ядро берётся из `../client-source/build/libs`, зависимости скачиваются по закреплённым
+хешам из `bundle-lock.json`. Обычная сборка скачивает Electron автоматически.
+`SOCKET_CORE_JAR` позволяет выбрать ядро, `SOCKET_ELECTRON_DIST` — локальный кеш Electron.
+Java 21 устанавливается пользователю автоматически при первом запуске игры.
+
+Код лоадера открыт под MIT: см. `LICENSE` и `../THIRD-PARTY-NOTICES.md`.
 
 ## Что где лежит
 

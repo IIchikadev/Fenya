@@ -31,18 +31,7 @@ function candidateJavaDirs() {
 }
 
 /** Ищет Java 21+: сначала из настроек, потом JAVA_HOME, потом стандартные каталоги. */
-function findJava() {
-  const settings = readSettings();
-  if (settings.javaPath && fs.existsSync(settings.javaPath)) return settings.javaPath;
-  if (process.env.JAVA_HOME) {
-    const javaw = path.join(process.env.JAVA_HOME, 'bin', 'javaw.exe');
-    if (fs.existsSync(javaw)) return javaw;
-  }
-  const candidates = candidateJavaDirs();
-  const modern = candidates.filter(candidate => /(-|\b)(2[1-9]|[3-9]\d)/.test(candidate.version));
-  const chosen = modern[0] || candidates[0];
-  return chosen ? chosen.path : null;
-}
+function findJava() { return require('./runtime').findJava(); }
 
 function artifactKey(name) {
   const [group, artifact] = String(name).split(':');
@@ -97,7 +86,7 @@ function gameArguments(versionJson, settings, assetsIndex) {
 
 async function launch(onLog) {
   const settings = readSettings();
-  const java = findJava();
+  const java = await require('./runtime').ensureJava();
   if (!java) throw new Error('Не найдена Java 21. Укажите путь к javaw.exe в настройках.');
   const versionJson = await vanilla.fetchVersionJson();
   const profile = await fabric.fetchFabricProfile();
@@ -122,6 +111,7 @@ async function launch(onLog) {
   const child = spawn(java, args, { cwd: paths.instance, detached: false });
   child.stdout.on('data', chunk => onLog && onLog(chunk.toString()));
   child.stderr.on('data', chunk => onLog && onLog(chunk.toString()));
+  await new Promise((resolve, reject) => { child.once('spawn', resolve); child.once('error', reject); });
   return child;
 }
 

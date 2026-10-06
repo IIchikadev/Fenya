@@ -13,31 +13,32 @@ function sha1(file) {
   });
 }
 
-async function isValid(file, expectedSha1) {
+async function isValid(file, expectedSha1, algorithm = 'sha1') {
   if (!fs.existsSync(file)) return false;
   if (!expectedSha1) return fs.statSync(file).size > 0;
   try {
-    return (await sha1(file)) === expectedSha1;
+    return crypto.createHash(algorithm).update(fs.readFileSync(file)).digest('hex') === expectedSha1;
   } catch {
     return false;
   }
 }
 
 async function getJson(url) {
-  const response = await fetch(url, { headers: { 'User-Agent': 'SocketLoader/1.0' } });
+  const response = await fetch(url, { headers: { 'User-Agent': 'SocketLoader/1.2' }, signal: AbortSignal.timeout(120000) });
   if (!response.ok) throw new Error(`${response.status} ${response.statusText} — ${url}`);
   return response.json();
 }
 
 /** Скачивает файл, если его нет или хеш не сходится. Возвращает true, если качали. */
-async function download(url, target, expectedSha1) {
-  if (await isValid(target, expectedSha1)) return false;
+async function download(url, target, expectedSha1, algorithm = 'sha1') {
+  if (await isValid(target, expectedSha1, algorithm)) return false;
   fs.mkdirSync(path.dirname(target), { recursive: true });
-  const response = await fetch(url, { headers: { 'User-Agent': 'SocketLoader/1.0' } });
+  const response = await fetch(url, { headers: { 'User-Agent': 'SocketLoader/1.2' }, signal: AbortSignal.timeout(120000) });
   if (!response.ok) throw new Error(`${response.status} ${response.statusText} — ${url}`);
   // читаем целиком: файлы игры небольшие, а потоковая запись через undici иногда падает на backpressure
   const buffer = Buffer.from(await response.arrayBuffer());
   const temp = `${target}.part`;
+  if (!buffer.length || (expectedSha1 && crypto.createHash(algorithm).update(buffer).digest('hex') !== expectedSha1)) throw new Error('Download checksum mismatch: ' + path.basename(target));
   fs.writeFileSync(temp, buffer);
   fs.renameSync(temp, target);
   return true;
