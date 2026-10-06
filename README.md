@@ -1,6 +1,6 @@
 # Socket Client / Socket loader
 
-Исходники проекта Socket Client: клиент для Minecraft 1.21.4 (Fabric), лоадер на Electron и лендинг.
+Исходники проекта Socket Client: клиент для Minecraft 1.21.4 (Fabric), лоадер на Electron.
 Готовый **Socket loader.exe** лежит в
 [Releases](https://github.com/IIchikadev/Socket/releases).
 
@@ -17,7 +17,6 @@ Java 21, Minecraft, Fabric, актуальное ядро, моды и шейд�
 |---|---|
 | `client-source/` | Код клиента (Java 21, Gradle, Fabric Loom) |
 | `loader-source/` | Код лоадера (Electron): скачивает Minecraft, Fabric, Fabric API и ставит ядро |
-| `site/` | Лендинг, открывается как `site/index.html` без сборки |
 
 ## Сборка
 
