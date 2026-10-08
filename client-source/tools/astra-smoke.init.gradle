@@ -1,0 +1,14 @@
+allprojects {
+    afterEvaluate {
+        sourceSets.main.java.srcDir('tools/runtime-smoke')
+        tasks.named('processResources') {
+            outputs.upToDateWhen { false }
+            doLast {
+                def file = new File(destinationDir, 'fabric.mod.json')
+                def json = new groovy.json.JsonSlurper().parse(file)
+                json.entrypoints.client.add('runtime.AstraSmokeTest')
+                file.text = groovy.json.JsonOutput.prettyPrint(groovy.json.JsonOutput.toJson(json))
+            }
+        }
+    }
+}

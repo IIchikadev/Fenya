@@ -35,6 +35,7 @@ public class GUIScreen extends Screen {
     private int f = -1;
     private boolean menuSoundOpened;
     private long portraitOpenedNanos;
+    private final socket.ui.shader.MenuEffectsShader menuEffects = new socket.ui.shader.MenuEffectsShader();
 
     @Override
     protected void init() {
@@ -122,6 +123,9 @@ public class GUIScreen extends Screen {
         double dA = MathUtil.scale(mouseX, 2);
         double dA2 = MathUtil.scale(mouseY, 2);
         ScaleUtil.a(context, 2);
+        float opening = Math.min(1.0f, (System.nanoTime() - this.portraitOpenedNanos) / 250_000_000.0f);
+        opening = (float)Math.sin(opening * Math.PI * 0.5);
+        menuEffects.render(context, Interface.mc.getWindow().getScaledWidth(), Interface.mc.getWindow().getScaledHeight(), (float)dA, (float)dA2, opening);
         double dSum = this.c.stream().mapToDouble(new ToDoubleFunction<GUIPanel>() {
             @Override
             public double applyAsDouble(GUIPanel obj) {

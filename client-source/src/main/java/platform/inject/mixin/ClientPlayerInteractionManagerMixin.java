@@ -23,6 +23,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin({ClientPlayerInteractionManager.class})
 public class ClientPlayerInteractionManagerMixin implements Interface {
+    @Inject(method = "clickSlot", at = @At("HEAD"), cancellable = true)
+    private void socketProtectDrop(int syncId, int slotId, int button, net.minecraft.screen.slot.SlotActionType action, PlayerEntity player, CallbackInfo ci) {
+        var lock = Socket.getInstance().getProcessors().modules().lockSlot();
+        var handler = player.currentScreenHandler;
+        if (!lock.m()) return;
+        if (action == net.minecraft.screen.slot.SlotActionType.THROW && slotId >= 0 && slotId < handler.slots.size()) {
+            var slot = handler.slots.get(slotId);
+            if (slot.inventory == player.getInventory() && lock.protects(slot.getStack(), slot.getIndex())) ci.cancel();
+        } else if (action == net.minecraft.screen.slot.SlotActionType.PICKUP && slotId == -999 && lock.protects(handler.getCursorStack(), -1)) {
+            ci.cancel();
+        }
+    }
     @Inject(method = {"attackEntity"}, at = {@At("HEAD")}, cancellable = true)
     private void onAttackEntity(PlayerEntity player, Entity target, CallbackInfo ci) {
         AttackEvent event = new AttackEvent(target);

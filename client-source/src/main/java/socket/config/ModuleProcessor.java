@@ -34,6 +34,16 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class ModuleProcessor extends ConfigProcessor<Module> {
+    private final GlassHands glassHands = new GlassHands();
+    private final ShaderHands shaderHands = new ShaderHands();
+    private final TotemGhost totemGhost = new TotemGhost();
+    private final ScanWorld scanWorld = new ScanWorld();
+    private final LockSlot lockSlot = new LockSlot();
+    public GlassHands glassHands() { return glassHands; }
+    public ShaderHands shaderHands() { return shaderHands; }
+    public TotemGhost totemGhost() { return totemGhost; }
+    public ScanWorld scanWorld() { return scanWorld; }
+    public LockSlot lockSlot() { return lockSlot; }
     private final AuctionHelper auctionHelper = new AuctionHelper();
     private final AutoResell autoResell = new AutoResell();
     private final Saturation saturation = new Saturation();
@@ -109,7 +119,7 @@ public class ModuleProcessor extends ConfigProcessor<Module> {
 
     public void setup() {
         this.bd = new Interface();
-        a(targetEsp, localCosmetics, auctionHelper, autoResell, saturation, bloom, skyShader, customFog, fakePlayer, chunkAnimator, fastPlace, glass, worldShaders, containerPreview, inventoryProfiles);
+        a(glassHands, shaderHands, totemGhost, scanWorld, lockSlot, targetEsp, localCosmetics, auctionHelper, autoResell, saturation, bloom, skyShader, customFog, fakePlayer, chunkAnimator, fastPlace, glass, worldShaders, containerPreview, inventoryProfiles);
         a(this.J, this.aE, this.ao, this.Q, this.ag, this.r, this.as, this.R, this.ay, this.L, this.o, this.ai, this.bd, this.at, this.aB, this.aO, this.bj, this.bp, this.bq, this.br, this.bs, this.bt, this.cb, this.cc, this.cd, this.ce, this.cf, this.cg, this.ch);
         super.setup();
     }

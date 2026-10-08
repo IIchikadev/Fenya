@@ -118,7 +118,7 @@ function renderUpdates(info) {
   if (!info || info.error || releases.length === 0) {
     status.textContent = info && info.error
       ? `не удалось получить релизы: ${info.error}`
-      : 'в релизах пока нет файла ядра socket-client-*.jar';
+      : 'обновлений клиента пока нет';
     select.innerHTML = '<option>нет версий</option>';
     select.disabled = true;
     el('core-install').disabled = true;

@@ -9,6 +9,9 @@ public final class RenderState implements AutoCloseable {
     private final net.minecraft.client.gl.ShaderProgram shader = RenderSystem.getShader();
     private final int texture0 = RenderSystem.getShaderTexture(0);
     private final int texture1 = RenderSystem.getShaderTexture(1);
+    private final int texture2 = RenderSystem.getShaderTexture(2);
+    private final int texture3 = RenderSystem.getShaderTexture(3);
+    private final int texture4 = RenderSystem.getShaderTexture(4);
     private final boolean depth = GL11.glIsEnabled(GL11.GL_DEPTH_TEST);
     private final boolean mask = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
     private final boolean blend = GL11.glIsEnabled(GL11.GL_BLEND);
@@ -27,6 +30,9 @@ public final class RenderState implements AutoCloseable {
         RenderSystem.setShader(shader);
         RenderSystem.setShaderTexture(0, texture0);
         RenderSystem.setShaderTexture(1, texture1);
+        RenderSystem.setShaderTexture(2, texture2);
+        RenderSystem.setShaderTexture(3, texture3);
+        RenderSystem.setShaderTexture(4, texture4);
         if (depth) RenderSystem.enableDepthTest(); else RenderSystem.disableDepthTest();
         RenderSystem.depthMask(mask);
         if (blend) RenderSystem.enableBlend(); else RenderSystem.disableBlend();

@@ -16,6 +16,7 @@ async function prepare() {
   const zip = new AdmZip(core);
   const meta = JSON.parse(zip.readAsText('fabric.mod.json'));
   if (meta.id !== 'socket') throw new Error('Expected Socket Client core.');
+  if (meta.version !== require('../package.json').version || JSON.stringify(meta.entrypoints).includes('runtime.')) throw new Error('Expected matching production client version, without QA entrypoints.');
   const files = [];
   const coreName = `core/socket-client-${meta.version}.jar`;
   fs.mkdirSync(path.join(output, 'core'), { recursive:true });

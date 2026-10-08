@@ -21,6 +21,7 @@
     "mixin.WorldBorderMixin"
   ],
   "client": [
+    "mixin.IrisHandEffectsMixin",
     "mixin.ChunkAnimatorMixin",
     "accessors.BipedEntityModelAccessor",
     "accessors.BossBarHudAccessor",

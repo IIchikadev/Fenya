@@ -23,8 +23,8 @@ async function isValid(file, expectedSha1, algorithm = 'sha1') {
   }
 }
 
-async function getJson(url) {
-  const response = await fetch(url, { headers: { 'User-Agent': 'SocketLoader/1.2' }, signal: AbortSignal.timeout(120000) });
+async function getJson(url, timeout = 120000) {
+  const response = await fetch(url, { headers: { 'User-Agent': 'SocketLoader/1.2.1' }, signal: AbortSignal.timeout(timeout) });
   if (!response.ok) throw new Error(`${response.status} ${response.statusText} — ${url}`);
   return response.json();
 }

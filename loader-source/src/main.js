@@ -12,6 +12,11 @@ let window = null;
 let gameProcess = null;
 let preparing = false;
 const bundle = require('./core/bundle');
+const primaryInstance = app.requestSingleInstanceLock();
+if (!primaryInstance) app.quit();
+app.on('second-instance', () => {
+  if (window && !window.isDestroyed()) { if (window.isMinimized()) window.restore(); window.focus(); }
+});
 
 function createWindow() {
   if (app.isPackaged) Menu.setApplicationMenu(null);
@@ -59,7 +64,7 @@ function findCoreJar() {
   const bundled = bundle.coreJar();
   // версия, выбранная или скачанная из релизов, важнее локальной сборки
   const selected = updates.selectedJar();
-  if (selected && (!bundled || updates.compareVersions(readSettings().coreVersion, bundle.version()) > 0)) return selected;
+  if (selected && (!bundled || updates.compareVersions(readSettings().coreVersion, bundle.version()) >= 0)) return selected;
   if (bundled) return bundled;
   const candidates = [
     path.join(app.getAppPath(), '..', 'SocketClient', 'build', 'libs'),
@@ -84,7 +89,9 @@ async function checkCoreUpdate() {
   try {
     const result = await updates.checkForUpdate();
     if (result.available && readSettings().autoUpdateCore && !preparing && !gameProcess) {
-      await updates.installRelease(result.latest, progress => send('install:progress', progress));
+      preparing = true;
+      try { await updates.installRelease(result.latest, progress => send('install:progress', progress)); }
+      finally { preparing = false; }
       send('updates:state', Object.assign({}, result, { available: false, current: result.latest.tag, installed: true }));
       return;
     }
@@ -95,6 +102,7 @@ async function checkCoreUpdate() {
 }
 
 app.whenReady().then(() => {
+  if (!primaryInstance) return;
   bundle.initialize();
   createWindow();
   app.on('activate', () => {
@@ -142,6 +150,17 @@ ipcMain.handle('game:launch', async () => {
   if (preparing) throw new Error('Preparation already running');
   preparing = true;
   try {
+  if (readSettings().autoUpdateCore) {
+    try {
+      const result = await updates.checkForUpdate();
+      if (result.available) {
+        await updates.installRelease(result.latest, progress => send('install:progress', progress));
+        send('updates:state', Object.assign({}, result, { available: false, current: result.latest.tag, installed: true }));
+      }
+    } catch (error) {
+      send('game:log', `[loader] Обновление недоступно: ${error.message}. Запускаем установленную версию.`);
+    }
+  }
   bundle.installDependencies();
   await require('./core/runtime').ensureJava(progress => send('install:progress', progress));
   const shaders = require('./core/shaders');
@@ -174,18 +193,24 @@ ipcMain.handle('updates:check', async () => {
 
 ipcMain.handle('updates:install', async (event, tag) => {
   if (preparing || gameProcess) throw new Error('Дождитесь завершения игры или установки');
+  preparing = true;
+  try {
   const { releases } = await updates.checkForUpdate();
   const release = releases.find(item => item.tag === tag);
   if (!release) throw new Error(`версия ${tag} не найдена в релизах`);
   await updates.installRelease(release, progress => send('install:progress', progress));
   return { coreVersion: release.tag };
+  } finally { preparing = false; }
 });
 
 ipcMain.handle('mods:list', () => mods.list());
 ipcMain.handle('mods:add', (event, files) => mods.add(files || []));
 ipcMain.handle('mods:toggle', (event, file) => mods.toggle(file));
 ipcMain.handle('mods:remove', (event, file) => mods.remove(file));
-ipcMain.handle('mods:installCore', () => mods.installCore(findCoreJar()));
+ipcMain.handle('mods:installCore', () => {
+  if (preparing || gameProcess) throw new Error('Дождитесь завершения игры или установки');
+  return mods.installCore(findCoreJar());
+});
 ipcMain.handle('mods:openFolder', () => shell.openPath(paths.mods));
 
 ipcMain.handle('dialog:pickMods', async () => {

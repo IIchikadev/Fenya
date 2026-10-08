@@ -89,11 +89,24 @@ function installCore(jarPath) {
   ensureDir(paths.mods);
   const temporary = path.join(paths.mods, 'socket-core.part');
   fs.writeFileSync(temporary, data);
-  for (const existing of fs.readdirSync(paths.mods)) {
-    if (existing.toLowerCase().startsWith(CORE_PREFIX) && isJar(existing)) fs.rmSync(path.join(paths.mods, existing));
-  }
   const target = path.join(paths.mods, path.basename(jarPath));
-  fs.renameSync(temporary, target);
+  const backup = path.join(paths.root, 'backups', 'core-' + Date.now());
+  const moved = [];
+  try {
+    for (const existing of fs.readdirSync(paths.mods)) {
+      const file = path.join(paths.mods, existing);
+      if (isJar(existing) && readModMeta(file)?.id === 'socket') {
+        ensureDir(backup);
+        fs.renameSync(file, path.join(backup, existing));
+        moved.push(existing);
+      }
+    }
+    fs.renameSync(temporary, target);
+  } catch (error) {
+    for (const existing of moved) fs.renameSync(path.join(backup, existing), path.join(paths.mods, existing));
+    if (fs.existsSync(temporary)) fs.rmSync(temporary);
+    throw error;
+  }
   return target;
 }
 

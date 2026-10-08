@@ -1,14 +1,16 @@
 {
   "name": "socket-loader",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "Лоадер Socket Client: ставит Minecraft 1.21.4 с Fabric и управляет модами",
   "main": "src/main.js",
   "private": true,
   "scripts": {
     "start": "electron .",
     "obfuscate": "node scripts/pack.js",
-    "dist": "node scripts/prepare-bundle.js && node scripts/pack.js --pack",
-    "bundle": "node scripts/prepare-bundle.js"
+    "dist": "node scripts/prepare-bundle.js && node scripts/pack.js --pack && node scripts/prepare-update.js",
+    "bundle": "node scripts/prepare-bundle.js",
+    "update-package": "node scripts/prepare-update.js",
+    "test": "node --test tests/*.test.cjs"
   },
   "build": {
     "appId": "ru.socketclient.loader",

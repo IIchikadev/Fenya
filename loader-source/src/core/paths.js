@@ -57,7 +57,7 @@ const defaultSettings = {
   javaPath: '',
   closeOnLaunch: false,
   fullscreen: false,
-  autoUpdateCore: false,
+  autoUpdateCore: true,
   allowPrerelease: false,
   coreVersion: '',
   coreAsset: '',

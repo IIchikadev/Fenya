@@ -1,0 +1,18 @@
+'use strict';
+const fs = require('fs');
+const path = require('path');
+const crypto = require('crypto');
+const AdmZip = require('adm-zip');
+const version = require('../package.json').version;
+const root = path.resolve(__dirname, '..');
+const core = path.resolve(root, '../client-source/build/libs', `socket-client-${version}.jar`);
+const bytes = fs.readFileSync(core);
+const metadata = JSON.parse(new AdmZip(bytes).readAsText('fabric.mod.json'));
+if (metadata.id !== 'socket' || metadata.version !== version || JSON.stringify(metadata.entrypoints).includes('runtime.')) throw new Error('Wrong production build');
+const manifest = { protocol: 1, version, minecraft: '1.21.4', core: path.basename(core), sha256: crypto.createHash('sha256').update(bytes).digest('hex') };
+const zip = new AdmZip();
+zip.addFile('update.json', Buffer.from(JSON.stringify(manifest, null, 2)));
+zip.addFile(manifest.core, bytes);
+fs.mkdirSync(path.join(root, 'dist'), { recursive: true });
+zip.writeZip(path.join(root, 'dist/socket-update.zip'));
+console.log('Update package prepared: ' + version);

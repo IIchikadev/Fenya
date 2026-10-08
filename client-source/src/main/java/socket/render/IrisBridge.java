@@ -25,6 +25,26 @@ public final class IrisBridge {
             return false;
         }
     }
+    /** Iris 1.8.8 owns the real scene color and pre-hand depth outside the main framebuffer. */
+    public static int[] handTextures() {
+        try {
+            Object manager=Class.forName("net.irisshaders.iris.Iris").getMethod("getPipelineManager").invoke(null);
+            Object pipeline=manager.getClass().getMethod("getPipelineNullable").invoke(manager);
+            if(pipeline==null) return null;
+            var field=pipeline.getClass().getDeclaredField("renderTargets"); field.setAccessible(true);
+            Object targets=field.get(pipeline);
+            Object config=Class.forName("net.irisshaders.iris.Iris").getMethod("getIrisConfig").invoke(null);
+            String pack=String.valueOf(config.getClass().getMethod("getShaderPackName").invoke(config));
+            int index=pack.toLowerCase(java.util.Locale.ROOT).contains("makeup") ? 1 : 0;
+            Object color=targets.getClass().getMethod("get",int.class).invoke(targets,index);
+            var flipped=(java.util.Set<?>)pipeline.getClass().getMethod("getFlippedAfterTranslucent").invoke(pipeline);
+            int colorId=(int)color.getClass().getMethod(flipped.contains(index)?"getAltTexture":"getMainTexture").invoke(color);
+            Object noHand=targets.getClass().getMethod("getDepthTextureNoHand").invoke(targets);
+            int beforeDepth=(int)noHand.getClass().getMethod("getTextureId").invoke(noHand);
+            int afterDepth=(int)targets.getClass().getMethod("getDepthTexture").invoke(targets);
+            return new int[]{colorId,beforeDepth,afterDepth};
+        } catch(ReflectiveOperationException | RuntimeException e) { return null; }
+    }
 
     public static void setEnabled(boolean enabled) throws ReflectiveOperationException {
         if (!AVAILABLE) throw new IllegalStateException("Установите Iris и Sodium через Socket Loader");

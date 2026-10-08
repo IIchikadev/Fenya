@@ -4,16 +4,21 @@ const path = require('path');
 const { paths, readSettings, writeSettings } = require('./paths');
 const { getJson, download } = require('./download');
 const mods = require('./mods');
+const crypto = require('crypto');
+const AdmZip = require('adm-zip');
+const { MC_VERSION } = require('./paths');
 
 /** Репозиторий, в релизах которого лежит собранное ядро socket-client-*.jar. */
 const REPO = 'IIchikadev/Socket';
 const CORE_ASSET = /^socket-client-.*\.jar$/i;
+const UPDATE_ASSET = /^socket-update\.zip$/i;
 
 function coresDir() {
   return path.join(paths.root, 'cores');
 }
 
 function localJar(tag, assetName) {
+  if (path.basename(assetName) !== assetName) throw new Error('Invalid update filename');
   return path.join(coresDir(), tag.replace(/[^\w.+-]/g, '_'), assetName);
 }
 
@@ -37,11 +42,12 @@ function compareVersions(left, right) {
 
 /** Релизы, в которых есть jar ядра, от новых к старым. */
 async function listReleases() {
-  const releases = await getJson(`https://api.github.com/repos/${REPO}/releases?per_page=30`);
+  const releases = await getJson(`https://api.github.com/repos/${REPO}/releases?per_page=30`, 12000);
   return releases
     .filter(release => !release.draft)
     .map(release => {
-      const asset = (release.assets || []).find(item => CORE_ASSET.test(item.name) && !/sources/i.test(item.name));
+      const assets = release.assets || [];
+      const asset = assets.find(item => UPDATE_ASSET.test(item.name)) || assets.find(item => CORE_ASSET.test(item.name) && !/sources/i.test(item.name));
       if (!asset) return null;
       return {
         tag: release.tag_name,
@@ -49,7 +55,7 @@ async function listReleases() {
         prerelease: Boolean(release.prerelease),
         published: release.published_at,
         notes: release.body || '',
-        asset: { name: asset.name, url: asset.browser_download_url, size: asset.size },
+        asset: { name: asset.name, url: asset.browser_download_url, size: asset.size, sha256: (asset.digest || '').replace(/^sha256:/, '') },
       };
     })
     .filter(Boolean)
@@ -68,11 +74,30 @@ function selectedJar() {
 async function installRelease(release, onProgress) {
   const report = (percent, text) => onProgress && onProgress({ percent, text });
   report(5, `скачиваем ядро ${release.tag}…`);
-  const target = localJar(release.tag, release.asset.name);
-  await download(release.asset.url, target);
+  let target = localJar(release.tag, release.asset.name);
+  if (!release.asset.url.startsWith(`https://github.com/${REPO}/releases/download/`)) throw new Error('Invalid update source');
+  await download(release.asset.url, target, release.asset.sha256 || undefined, 'sha256');
+  if (UPDATE_ASSET.test(release.asset.name)) {
+    const zip = new AdmZip(target);
+    const entry = zip.getEntry('update.json');
+    if (!entry || entry.header.size > 65536) throw new Error('Update manifest missing');
+    const manifest = JSON.parse(entry.getData().toString('utf8'));
+    if (manifest.protocol !== 1 || manifest.minecraft !== MC_VERSION || manifest.version !== release.tag) throw new Error('Это обновление требует другую версию лоадера');
+    if (!/^socket-client-[\w.+-]+\.jar$/.test(manifest.core) || !/^[a-f0-9]{64}$/.test(manifest.sha256)) throw new Error('Invalid core manifest');
+    const core = zip.getEntry(manifest.core);
+    if (!core || core.header.size > 150 * 1024 * 1024) throw new Error('Invalid core size');
+    const bytes = core.getData();
+    if (crypto.createHash('sha256').update(bytes).digest('hex') !== manifest.sha256) throw new Error('Update checksum mismatch');
+    const metaEntry = new AdmZip(bytes).getEntry('fabric.mod.json');
+    const meta = metaEntry && JSON.parse(metaEntry.getData().toString('utf8'));
+    if (!meta || meta.id !== 'socket' || meta.version !== release.tag) throw new Error('Wrong client version in update');
+    target = localJar(release.tag, manifest.core);
+    fs.writeFileSync(target + '.part', bytes);
+    fs.renameSync(target + '.part', target);
+  }
   report(80, `устанавливаем ядро ${release.tag}…`);
   mods.installCore(target);
-  writeSettings({ coreVersion: release.tag, coreAsset: release.asset.name });
+  writeSettings({ coreVersion: release.tag, coreAsset: path.basename(target) });
   report(100, `ядро ${release.tag} установлено`);
   return target;
 }

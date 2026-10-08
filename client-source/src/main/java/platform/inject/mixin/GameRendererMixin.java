@@ -39,6 +39,7 @@ public class GameRendererMixin implements Interface {
 
     @Inject(method = {"renderHand"}, at = {@At("HEAD")})
     private void preRenderHand(Camera camera, float tickDelta, Matrix4f matrix4f, CallbackInfo ci) {
+        if (!socket.render.IrisBridge.active()) socket.render.HandEffects.begin();
         EventManager.a(new HandEvent(HandEvent.eventPhase.PRE));
     }
 
@@ -47,15 +48,18 @@ public class GameRendererMixin implements Interface {
         socket.render.CameraMotionBlur.capture(view, projection);
         socket.render.WorldEffects.render(true);
         socket.render.CameraMotionBlur.render();
+        socket.render.ScanWorldEffect.render(view, projection);
     }
 
     @Inject(method = "renderWorld", at = @At("RETURN"))
     private void socketHandEffects(RenderTickCounter counter, CallbackInfo ci) {
         socket.render.WorldEffects.render(false);
+        if (socket.render.IrisBridge.active()) socket.render.HandEffects.finish();
     }
 
     @Inject(method = {"renderHand"}, at = {@At(value = "INVOKE", target = "Lnet/minecraft/client/gui/hud/InGameOverlayRenderer;renderOverlays(Lnet/minecraft/client/MinecraftClient;Lnet/minecraft/client/util/math/MatrixStack;Lnet/minecraft/client/render/VertexConsumerProvider;)V")})
     private void postRenderHand(Camera camera, float tickDelta, Matrix4f matrix4f, CallbackInfo ci) {
+        if (!socket.render.IrisBridge.active()) socket.render.HandEffects.end();
         EventManager.a(new HandEvent(HandEvent.eventPhase.POST));
     }
 

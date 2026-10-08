@@ -9,6 +9,7 @@ import org.spongepowered.asm.mixin.extensibility.IMixinInfo;
 
 public final class SocketMixinPlugin implements IMixinConfigPlugin {
     @Override public boolean shouldApplyMixin(String target, String mixin) {
+        if (mixin.endsWith(".IrisHandEffectsMixin")) return FabricLoader.getInstance().isModLoaded("iris");
         return !mixin.endsWith(".ChunkAnimatorMixin") || !FabricLoader.getInstance().isModLoaded("sodium");
     }
     @Override public void onLoad(String mixinPackage) {}
